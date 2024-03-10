@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuário</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<ul class="nav nav-pills menu-container">
+    <li class="nav-item">
+        <a class="nav-link active" href="#">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="/profile/createUser">Sign-in / Sign-up</a>
+            <a class="dropdown-item" href="#">Change password</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Tools</a>
+    </li>
+</ul>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Dados do Usuário
+        </div>
+        <div class="card-body">
+            <div class="container mt-5">
+                <h2 class="mb-4">Cadastro de Usuário</h2>
+                <form th:action="@{/createUser}" method="post" id="formCreateUser" class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="primeiroNome">Primeiro Nome</label>
+                            <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" required>
+                            <div class="invalid-feedback">
+                                Por favor, insira o primeiro nome.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="segundoNome">Último Nome</label>
+                            <input type="text" class="form-control" id="segundoNome" name="segundoNome" required>
+                            <div class="invalid-feedback">
+                                Por favor, insira o último nome.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3"> <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="invalid-feedback"> Please provide your email. </div>
+                    </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="password">Senha</label>
+                            <input type="password" class="form-control" id="password" name="password" pattern="(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)(?=.*\S).{8,20}" required>
+                            <div id="password-feedback" class="feedback">A senha deve ter entre 8 e 20 caracteres e conter pelo menos um número, uma letra, um caractere especial e não pode conter espaços em branco.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="confirmPassword">Confirmar Senha</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required placeholder="Confirmar senha" readonly>
+                            <div id="confirmPassword-feedback" class="feedback">Por favor, confirme sua senha.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <label for="cep">CEP</label>
+                            <input type="text" class="form-control" id="cep" name="cep" th:maxlength="9" th:placeholder="'12345-678'" pattern="[0-9]{5}-[0-9]{3}" required>
+                            <div class="invalid-feedback">
+                                Por favor, insira o CEP.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="street">Rua</label>
+                            <input type="text" class="form-control" id="street" name="street" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="district">Bairro</label>
+                            <input type="text" class="form-control" id="district" name="district" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="city">Cidade</label>
+                            <input type="text" class="form-control" id="city" name="city" readonly>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="numero">Número</label>
+                            <input type="text" class="form-control" id="numero" name="numero" required>
+                            <div class="invalid-feedback">
+                                Por favor, insira o número.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" class="form-control" id="complemento" name="complemento">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="/js/profileFunctions.js"></script>
+</body>
+</html>

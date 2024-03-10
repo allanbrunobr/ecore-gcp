@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href='//fonts.googleapis.com/css?family=Marmelad' rel='stylesheet' type='text/css'>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #e9ecef;
+        }
+
+        .custom-file-upload i {
+            margin-right: 5px;
+        }
+
+        /* Esconder o input original */
+        #file-upload {
+            display: none;
+        }
+
+        .menu-container {
+            margin-top: 20px; /* Ajuste conforme necessário */
+        }
+    </style>
+    <title>GCP - APP</title>
+</head>
+<body>
+<ul class="nav nav-pills menu-container">
+    <li class="nav-item">
+        <a class="nav-link active" href="#">Home</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="/profile/createUser">Sign-in / Sign-up</a>
+            <a class="dropdown-item" href="#">Change password</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Tools</a>
+    </li>
+</ul>
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Dados do Usuário
+        </div>
+        <div class="card-body">
+            <form class="needs-validation" novalidate action="/uploadFileToStorage" method="post" enctype="multipart/form-data">
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card" style="width: 18rem;">
+                            <img src="/images/no-picture.png" class="card-img-top" alt="" id="uploaded-image">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            <label for="file-upload" class="custom-file-upload">
+                                <i class="fas fa-cloud-upload-alt"></i> Escolher Imagem
+                            </label>
+                            <input type="file" id="file-upload" name="file" accept="image/png, image/jpeg">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit">Enviar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    const fileUpload = document.getElementById('file-upload');
+    const uploadedImage = document.getElementById('uploaded-image');
+
+    fileUpload.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            uploadedImage.src = e.target.result;
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            uploadedImage.src = '';
+        }
+    });
+</script>
+</body>
+
+</html>
