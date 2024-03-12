@@ -30,6 +30,9 @@ public class ResultSubscriber {
         String subscriptionId = "app-ecore-consumer-sub";
         subscribe(projectId, subscriptionId);
     }
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     public void subscribe(String projectId, String subscriptionId) {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(GoogleCredentials.fromStream(new FileInputStream(
@@ -37,7 +40,6 @@ public class ResultSubscriber {
             ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(projectId, subscriptionId);
             Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (MessageReceiver) (message, consumer) -> {
                 String jsonData = message.getData().toStringUtf8();
-                ObjectMapper objectMapper = new ObjectMapper();
                 try {
                     FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
                     // Quando uma mensagem é recebida e processada

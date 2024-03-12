@@ -28,8 +28,8 @@ public class ProfileController {
 
     @PostMapping("/createUser")
     public ResponseEntity<Object> save(@RequestBody UserDTO userDTO) {
-        var userCreated = userService.saveUser(userDTO);
-        return generateResponse("Items saved successfully!", OK, userCreated);
+        userService.saveUser(userDTO);
+        return generateResponse("Items saved successfully!", OK, userDTO);
     }
 
     public static ResponseEntity<Object> generateResponse(String message, HttpStatus status, Object responseObj) {

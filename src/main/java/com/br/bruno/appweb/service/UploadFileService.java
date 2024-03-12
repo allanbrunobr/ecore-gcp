@@ -4,6 +4,8 @@ import com.br.bruno.appweb.interfaces.EventListener;
 import com.br.bruno.appweb.models.cvision.FaceDetectionMessage;
 import com.br.bruno.appweb.events.EventBus;
 import com.google.cloud.storage.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,28 +14,38 @@ import java.util.UUID;
 
 @Service
 public class UploadFileService implements EventListener<FaceDetectionMessage> {
-    String projectId = "app-springboot-project";
-    String bucketName = "app-springboot-project-images";
-
+    @Value("${project.id}")
+    private String projectId;
+    @Value("${bucket.name}")
+    private String bucketName;
     private EventBus eventBus;
+    private Storage storage;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public UploadFileService(EventBus eventBus) {
+
+    public UploadFileService(EventBus eventBus, SimpMessagingTemplate simpMessagingTemplate) {
         this.eventBus = eventBus;
+        this.simpMessagingTemplate = simpMessagingTemplate;
         this.eventBus.subscribe(FaceDetectionMessage.class, this);
+        this.storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
+
     }
-    public void store(MultipartFile file) throws IOException {
-
-        Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
-
-        String fileName = UUID.randomUUID().toString() + file.getOriginalFilename();
-        BlobId blobId = BlobId.of(bucketName, fileName);
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
-        Blob blob = storage.create(blobInfo, file.getBytes());
-
+    public void store(MultipartFile file) {
+        try {
+            String fileName = UUID.randomUUID().toString() + file.getOriginalFilename();
+            BlobId blobId = BlobId.of(bucketName, fileName);
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+            storage.create(blobInfo, file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void onEvent(FaceDetectionMessage event) {
-        // Lidar com o evento recebido
         System.out.println("Mensagem recebida pelo UploadService: " + event.toString());
+        simpMessagingTemplate.convertAndSend("/topic/result", event.toString());
+        System.out.println("Enviado...");
+
+
     }
 }

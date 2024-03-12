@@ -11,18 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
 
     @Transactional
-    public User saveUser(UserDTO userDTO) {
+    public void saveUser(UserDTO userDTO) {
         User user = new User();
-        user.setPrimeiroNome(userDTO.getPrimeiroNome());
-        user.setSegundoNome(userDTO.getSegundoNome());
-        user.setEmail(userDTO.getEmail());
-        String senhaCriptografada = new BCryptPasswordEncoder().encode(userDTO.getPassword());
-        user.setPassword(senhaCriptografada);
-        user.setCep(userDTO.getCep());
+        try {
+            user.setPrimeiroNome(userDTO.getPrimeiroNome());
+            user.setSegundoNome(userDTO.getSegundoNome());
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+            user.setCep(userDTO.getCep());
 
-        return userRepository.save(user);
+            userRepository.save(user);
+        } catch (Exception e) {
+        throw new RuntimeException("Failed to save user: " + e.getMessage());
+    }
     }
 }
