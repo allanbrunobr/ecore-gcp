@@ -42,10 +42,10 @@ if (logoutLink) {
     });
 
 }
-//
-// firebase.auth().onAuthStateChanged((user) => {
+
+// onAuthStateChanged(auth, (user) => {
 //     if (user) {
-//         window.location.href = "../pages/main.html"; // Redirect to main page
+//         window.location.href = "../../templates/main.html"; // Redirect to main page
 //     } else {
 //         window.location.href = "../index.html"; // Redirect to main page
 //     }

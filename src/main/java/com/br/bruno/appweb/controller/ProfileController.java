@@ -1,22 +1,21 @@
 package com.br.bruno.appweb.controller;
 
-import com.br.bruno.appweb.models.User;
-import com.br.bruno.appweb.models.UserDTO;
+import com.br.bruno.appweb.models.users.UserDTO;
 import com.br.bruno.appweb.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ProfileController {
 
