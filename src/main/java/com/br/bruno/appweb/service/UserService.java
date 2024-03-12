@@ -1,7 +1,7 @@
 package com.br.bruno.appweb.service;
 
-import com.br.bruno.appweb.models.User;
-import com.br.bruno.appweb.models.UserDTO;
+import com.br.bruno.appweb.models.users.User;
+import com.br.bruno.appweb.models.users.UserDTO;
 import com.br.bruno.appweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

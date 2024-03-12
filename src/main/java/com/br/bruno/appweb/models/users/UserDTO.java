@@ -1,4 +1,4 @@
-package com.br.bruno.appweb.models;
+package com.br.bruno.appweb.models.users;
 
 import lombok.Data;
 
