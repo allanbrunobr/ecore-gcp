@@ -19,7 +19,7 @@ if (googleLoginBtn) {
                     const credential = firebase.auth.GoogleAuthProvider.credentialFromResult(result);
                     const user = result.user;
                     console.log(user);
-                    window.location.href = "../pages/main.html";
+                    window.location.href = "/main";
                 }).catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
@@ -34,7 +34,7 @@ if (logoutLink) {
         auth.signOut()
             .then(() => {
                 console.log('Usuário deslogado com sucesso');
-                window.location.href = "../index.html"; // redireciona para a página de login
+                window.location.href = "/logout"; // redireciona para a página de login
             })
             .catch((error) => {
                 console.log('Erro ao deslogar usuário: ', error);
@@ -42,7 +42,6 @@ if (logoutLink) {
     });
 
 }
-
 // onAuthStateChanged(auth, (user) => {
 //     if (user) {
 //         window.location.href = "../../templates/main.html"; // Redirect to main page

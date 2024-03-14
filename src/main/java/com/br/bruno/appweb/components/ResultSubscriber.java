@@ -10,7 +10,9 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.pubsub.v1.MessageReceiver;
 import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
@@ -21,9 +23,13 @@ public class ResultSubscriber {
 
     private EventBus eventBus;
 
-    public ResultSubscriber(EventBus eventBus) {
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    public ResultSubscriber(EventBus eventBus, SimpMessagingTemplate simpMessagingTemplate) {
         this.eventBus = eventBus;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
+
     @PostConstruct
     public void init() {
         String projectId = "app-springboot-project";
@@ -37,14 +43,16 @@ public class ResultSubscriber {
         try {
             CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(GoogleCredentials.fromStream(new FileInputStream(
                     "src/main/resources/keys/appubsub-admin-springboot-project-03da67dd523b.json")));
+
             ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(projectId, subscriptionId);
             Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (MessageReceiver) (message, consumer) -> {
-                String jsonData = message.getData().toStringUtf8();
+            String jsonData = message.getData().toStringUtf8();
                 try {
                     FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
-                    // Quando uma mensagem é recebida e processada
                     eventBus.publish(faceDetectionMessage);
-                    System.out.println("Mensagem recebida pelo ResultSubscriber: " + faceDetectionMessage.toString());
+//                  System.out.println("Mensagem recebida pelo ResultSubscriber: " + faceDetectionMessage.getFaceData());
+                    //simpMessagingTemplate.convertAndSend("/topic/result", faceDetectionMessage.getFaceData());
+
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }

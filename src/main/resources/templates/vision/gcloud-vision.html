@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" charset="UTF-8">
 <head>
+
     <link href='//fonts.googleapis.com/css?family=Marmelad' rel='stylesheet' type='text/css'>
     <link href="/css/bootstrap.min.css}" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="/js/sockjs.js"></script>
-    <script src="/js/stomp.js"></script>
-
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
 
     <style>
         .menu-container {
@@ -49,6 +50,8 @@
     <title>e-Core - GCP</title>
 </head>
 <body>
+
+
 <ul class="nav nav-pills menu-container">
     <li class="nav-item">
         <a class="nav-link active" href="#">Home</a>
@@ -56,7 +59,7 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="/pages/profile/createUser.html">Sign-in / Sign-up</a>
+            <a class="dropdown-item" href="/templates/profilefile/createUser.html">Sign-in / Sign-up</a>
             <a class="dropdown-item" href="#">Change password</a>
             <a class="dropdown-item" href="#">Something else here</a>
             <div class="dropdown-divider"></div>
@@ -67,7 +70,7 @@
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
            aria-haspopup="true" aria-expanded="false">Tools</a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="/pages/vision/gcloud-vision.html">Cloud Vision</a>
+            <a class="dropdown-item" href="/templates/visionsion/gcloud-vision.html">Cloud Vision</a>
             <a class="dropdown-item" href="#">Change password</a>
             <a class="dropdown-item" href="#">Something else here</a>
             <div class="dropdown-divider"></div>
@@ -76,7 +79,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#" id="logout-link" >Logout</a>
-    </li>
+    </li>`
 </ul>
 <div class="container">
     <div class="card">
@@ -115,6 +118,7 @@
         </div>
     </div>
 </div>
+<!-- Resultado da análise de imagem -->
 
 <script>
     (function() {
@@ -164,22 +168,24 @@
     stompClient.connect({}, function(frame) {
         console.log('Conectado ao WebSocket');
         stompClient.subscribe('/topic/result', function(message) {
-            // Atualize a interface do usuário com os dados recebidos
             var eventData = JSON.parse(message.body);
             console.log(eventData);
-            document.getElementById('result-container').innerText = eventData;
+            alert(JSON.stringify(eventData));
+            document.getElementById('result-container').innerText = JSON.stringify(eventData);
         });
     });
 
 </script>
-<!-- Bootstrap JavaScript -->
-<script src="/js/bootstrap.bundle.min.js}"></script>
+<script src="https://console.cloud.google.com/storage/browser/app-springboot-project-js/bootstrap.bundle.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://console.cloud.google.com/storage/browser/app-springboot-project-js/auth.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="/js/auth.js"></script>
-
 </body>
 
 </html>
