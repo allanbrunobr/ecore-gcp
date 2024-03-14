@@ -27,10 +27,7 @@ public class FileUploadController {
         ModelAndView modelAndView = new ModelAndView("vision/gcloud-vision");
 
         try {
-            //CountDownLatch latch = new CountDownLatch(1);
             uploadService.store(file);
-            //latch.await(15, TimeUnit.SECONDS); // Timeout de 10 segundos
-
             message = "Upload do arquivo realizado com sucesso! " + file.getOriginalFilename() + "!";
             redirectAttributes.addFlashAttribute("message", message);
         } catch (Exception e) {

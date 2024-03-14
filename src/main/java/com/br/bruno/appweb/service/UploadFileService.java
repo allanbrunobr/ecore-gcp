@@ -40,18 +40,12 @@ public class UploadFileService implements EventListener<FaceDetectionMessage> {
             BlobId blobId = BlobId.of(bucketName, fileName);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
             storage.create(blobInfo, file.getBytes());
-//            // Notificar o latch após o upload do arquivo
-//            if (latch != null) {
-//                latch.countDown();
-//            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void storeWithLatch(MultipartFile file) {//}, CountDownLatch latch) {
-       // this.latch = latch;
+    public void storeWithLatch(MultipartFile file) {
         store(file);
     }
     @Override

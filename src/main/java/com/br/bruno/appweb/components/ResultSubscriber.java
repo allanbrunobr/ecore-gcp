@@ -23,11 +23,8 @@ public class ResultSubscriber {
 
     private EventBus eventBus;
 
-    private SimpMessagingTemplate simpMessagingTemplate;
-
-    public ResultSubscriber(EventBus eventBus, SimpMessagingTemplate simpMessagingTemplate) {
+    public ResultSubscriber(EventBus eventBus) {
         this.eventBus = eventBus;
-        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @PostConstruct
@@ -50,9 +47,6 @@ public class ResultSubscriber {
                 try {
                     FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
                     eventBus.publish(faceDetectionMessage);
-//                  System.out.println("Mensagem recebida pelo ResultSubscriber: " + faceDetectionMessage.getFaceData());
-                    //simpMessagingTemplate.convertAndSend("/topic/result", faceDetectionMessage.getFaceData());
-
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
