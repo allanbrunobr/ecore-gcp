@@ -17,35 +17,7 @@
 
 </head>
 <body>
-<ul class="nav nav-pills menu-container">
-    <li class="nav-item">
-        <a class="nav-link active" href="#">Home</a>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="/vision">Sign-in / Sign-up</a>
-            <a class="dropdown-item" href="#">Change password</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-           aria-haspopup="true" aria-expanded="false">Tools</a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="/vision">Cloud Vision</a>
-            <a class="dropdown-item" href="#">Change password</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#" id="logout-link" >Logout</a>
-    </li>
-</ul>
+<th:block th:replace="/fragments/menu-fragment :: menu"></th:block>
 <script src="https://console.cloud.google.com/storage/browser/app-springboot-project-js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

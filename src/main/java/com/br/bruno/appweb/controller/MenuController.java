@@ -19,7 +19,12 @@ public class MenuController {
 
     @RequestMapping("/vision")
     public String vision() {
-        return "/vision/gcloud-vision";
+        return "ai/vision/gcloud-vision";
+    }
+
+    @RequestMapping("/sentiment")
+    public String sentiment() {
+        return "ai/sentiment-analysis/sentiment-analysis";
     }
 
 }
