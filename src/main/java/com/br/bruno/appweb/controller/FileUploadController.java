@@ -20,7 +20,7 @@ public class FileUploadController {
     @PostMapping("/uploadFileToStorage")
     public ModelAndView handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         String message;
-        ModelAndView modelAndView = new ModelAndView("vision/gcloud-vision-result");
+        ModelAndView modelAndView = new ModelAndView("ai/vision/gcloud-vision-result");
         try {
             uploadService.store(file);
             message = "Upload do arquivo realizado com sucesso! " + file.getOriginalFilename() + "!";
