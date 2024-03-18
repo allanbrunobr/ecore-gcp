@@ -17,6 +17,11 @@ public class MenuController {
         return "main";
     }
 
+    @RequestMapping("/user")
+    public String createUser() {
+        return "user/createUser";
+    }
+
     @RequestMapping("/vision")
     public String vision() {
         return "ai/vision/gcloud-vision";
@@ -26,5 +31,4 @@ public class MenuController {
     public String sentiment() {
         return "ai/sentiment-analysis/sentiment-analysis";
     }
-
 }

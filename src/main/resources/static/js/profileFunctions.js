@@ -8,41 +8,41 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function() {
-    $('#cep').inputmask('99999-999');
-});
-
-function getAddressByCep(cep) {
-    return new Promise((resolve, reject) => {
-        $.getJSON('https://api.brasilaberto.com/v1/zipcode/' + cep.replace('-', ''))
-            .done(function (data) {
-                if (data && data.result) {
-                    resolve(data.result);
-                } else {
-                    reject(new Error('Endereço não encontrado para o CEP fornecido.'));
-                }
-            })
-            .fail(function (jqxhr, textStatus, error) {
-                reject(new Error('Erro ao consultar o CEP: ' + textStatus + ', ' + error));
-            });
-    });
-}
-
-$('#cep').blur(function () {
-    var cep = $(this).val().replace(/\D/g, '');
-    if (cep.length === 8) {
-        getAddressByCep(cep)
-            .then(function (address) {
-                $('#street').val(address.street);
-                $('#district').val(address.district);
-                $('#city').val(address.city);
-            })
-            .catch(function (error) {
-                console.error(error);
-                // Handle the error here, for example, by displaying an error message to the user
-            });
-    }
-});
+// $(document).ready(function() {
+//     $('#cep').inputmask('99999-999');
+// });
+//
+// function getAddressByCep(cep) {
+//     return new Promise((resolve, reject) => {
+//         $.getJSON('https://brasilapi.com.br/api/cep/v1/' + cep.replace('-', ''))
+//             .done(function (data) {
+//                 if (data && data.result) {
+//                     resolve(data.result);
+//                 } else {
+//                     reject(new Error('Endereço não encontrado para o CEP fornecido.'));
+//                 }
+//             })
+//             .fail(function (jqxhr, textStatus, error) {
+//                 reject(new Error('Erro ao consultar o CEP: ' + textStatus + ', ' + error));
+//             });
+//     });
+// }
+//
+// $('#cep').blur(function () {
+//     var cep = $(this).val().replace(/\D/g, '');
+//     if (cep.length === 8) {
+//         getAddressByCep(cep)
+//             .then(function (address) {
+//                 $('#street').val(address.street);
+//                 $('#district').val(address.district);
+//                 $('#city').val(address.city);
+//             })
+//             .catch(function (error) {
+//                 console.error(error);
+//                 // Handle the error here, for example, by displaying an error message to the user
+//             });
+//     }
+// });
 // Password and confirmPassword fields validation
 var passwordField = document.getElementById('password');
 var confirmPasswordField = document.getElementById('confirmPassword');
@@ -125,7 +125,7 @@ $().ready(function() {
                 type: 'POST',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
-                url: '/createUser',
+                url: '/create',
                 data: JSON.stringify(formData),
                 success: function (response) {
                     console.log(response);

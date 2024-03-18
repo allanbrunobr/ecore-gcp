@@ -5,6 +5,7 @@
     <th:block th:replace="fragments/common-head-libs :: common-head-libs"></th:block>
 
   <title>e-Core - GCP</title>
+
 </head>
 <body>
 <th:block th:replace="fragments/menu-fragment :: menu"></th:block>
@@ -12,10 +13,12 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            Resultado da Análise
+            Photo Analysis Result
         </div>
-        <div class="spinner-border" role="status" id="loading-container">
-            <span class="sr-only">Loading...</span>
+        <div class="d-flex justify-content-center">
+            <div class="spinner-grow"  role="status" id="loading-container">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
         <div class="card-body">
             <div id="result-container" style="display: none;"></div>
@@ -23,41 +26,9 @@
     </div>
 </div>
 
+<th:block th:replace="fragments/commons-js :: commons-js"></th:block>
+<script src="/js/vision.js"></script>
 
-<script>
-    // Configuração do cliente WebSocket
-    var socket = new SockJS('/ws');
-    var stompClient = Stomp.over(socket);
-
-    stompClient.connect({}, function(frame) {
-        console.log('Conectado ao WebSocket');
-
-        stompClient.subscribe('/topic/analysisResult', function(message) {
-            var eventData = JSON.parse(message.body);
-            console.log("Resultado recebido:", eventData);
-
-            // // Hide the loading container and show the result container
-            // document.getElementById('loading-container').style.display = 'none';
-            // document.getElementById('result-container').style.display = 'block';
-            // Atualizar o conteúdo da página com a mensagem recebida
-            document.getElementById('result-container').innerText = JSON.stringify(eventData);
-            document.getElementById('loading-container').style.display = 'none';
-            document.getElementById('result-container').style.display = 'block';
-        });
-    });
-
-
-</script>
-<script src="https://console.cloud.google.com/storage/browser/app-springboot-project-js/bootstrap.bundle.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://console.cloud.google.com/storage/browser/app-springboot-project-js/auth.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="/js/auth.js"></script>
 </body>
 
 </html>

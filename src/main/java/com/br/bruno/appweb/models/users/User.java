@@ -16,6 +16,4 @@ public class User {
     private String segundoNome;
     private String email;
     private String password;
-    private String cep;
-
 }

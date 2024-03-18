@@ -9,7 +9,5 @@ public class UserDTO {
     private String segundoNome;
     private String email;
     private String password;
-    private String cep;
-
 
 }

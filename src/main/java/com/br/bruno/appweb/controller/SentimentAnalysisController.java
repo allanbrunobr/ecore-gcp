@@ -23,7 +23,7 @@ public class SentimentAnalysisController {
         this.analyzeSentimentService = analyzeSentimentService;
     }
 
-    @PostMapping("/sentimentAnalysisService")
+    @PostMapping("/sentimentAnalysis")
     public ModelAndView sentimentAnalysis(@RequestParam("dados") String dados) {
         ModelAndView modelAndView = new ModelAndView("ai/sentiment-analysis/sentiment-analysis-result");
         try {
