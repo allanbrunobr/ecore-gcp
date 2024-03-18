@@ -1,15 +1,10 @@
 package com.br.bruno.appweb.controller;
 
-import com.br.bruno.appweb.models.sentiment.SentimentDescription;
 import com.br.bruno.appweb.service.TranslatorService;
-import com.br.bruno.appweb.service.UploadFileService;
-import com.google.cloud.language.v2.Sentiment;
 import com.google.cloud.translate.v3.Translation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;

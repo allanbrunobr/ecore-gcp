@@ -30,31 +30,28 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
     implementation group: 'org.webjars', name: 'bootstrap', version: '5.3.3'
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '3.2.3'
+    implementation group: 'org.springframework', name: 'spring-messaging', version: '6.1.4'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.0-rc1'
+    implementation group: 'org.springframework', name: 'spring-websocket', version: '6.1.4'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.ai:spring-ai-vertex-ai-spring-boot-starter'
+    // implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter-sql-mysql', version: '1.2.8.RELEASE'
+    // implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.2.2'
+    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     implementation group: 'com.google.cloud', name: 'google-cloud-storage', version: '2.34.0'
     implementation group: 'com.google.cloud.functions', name: 'functions-framework-api', version: '1.1.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-core', version: '2.35.0'
-    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter-sql-mysql', version: '1.2.8.RELEASE'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '3.2.3'
-    implementation group: 'org.springframework', name: 'spring-messaging', version: '6.1.4'
-
-    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.2.2'
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.0-rc1'
-    implementation group: 'org.springframework', name: 'spring-websocket', version: '6.1.4'
-
+    implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-starter-pubsub', version: '5.1.0'
+    implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
     implementation group: 'com.google.cloud', name: 'google-cloud-aiplatform', version: '3.38.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-language', version: '2.38.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-vertexai', version: '0.6.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-translate', version: '2.37.0'
     implementation 'com.google.cloud:google-cloud-language'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-starter-pubsub', version: '5.1.0'
-    implementation 'com.google.cloud:spring-cloud-gcp-starter-storage'
-    implementation 'org.springframework.ai:spring-ai-vertex-ai-spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

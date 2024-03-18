@@ -1,7 +1,8 @@
 package com.br.bruno.appweb.components;
 
-import com.br.bruno.appweb.models.cvision.FaceDetectionMessage;
+import com.br.bruno.appweb.models.vision.FaceDetectionMessage;
 import com.br.bruno.appweb.events.EventBus;
+import com.br.bruno.appweb.models.vision.landmarks.LandmarkDetectionMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.gax.core.CredentialsProvider;
@@ -10,9 +11,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.pubsub.v1.MessageReceiver;
 import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
@@ -31,7 +30,10 @@ public class ResultSubscriber {
     public void init() {
         String projectId = "app-springboot-project";
         String subscriptionId = "app-ecore-consumer-sub";
+        String landmarkSubscriptionId = "app-ecore-consumer-sub-landmark";
+
         subscribe(projectId, subscriptionId);
+        subscribe(projectId, landmarkSubscriptionId);
     }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -45,8 +47,15 @@ public class ResultSubscriber {
             Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (MessageReceiver) (message, consumer) -> {
             String jsonData = message.getData().toStringUtf8();
                 try {
-                    FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
-                    eventBus.publish(faceDetectionMessage);
+                    if (subscriptionId.equals("app-ecore-consumer-sub")) {
+                          FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
+                          eventBus.publish(faceDetectionMessage);
+                      } else if (subscriptionId.equals("app-ecore-consumer-sub-landmark")) {
+                          LandmarkDetectionMessage landmarkDetectionMessage = objectMapper.readValue(jsonData, LandmarkDetectionMessage.class);
+                          eventBus.publish(landmarkDetectionMessage);
+                      } else {
+                          // Handle unknown subscription ID
+                      }
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -58,4 +67,5 @@ public class ResultSubscriber {
         }
     }
 }
+
 

@@ -1,4 +1,4 @@
-package com.br.bruno.appweb.models.cvision;
+package com.br.bruno.appweb.models.vision;
 
 public class FaceData {
     private int id;

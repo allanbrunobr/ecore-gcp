@@ -22,9 +22,14 @@ public class MenuController {
         return "user/createUser";
     }
 
-    @RequestMapping("/vision")
-    public String vision() {
-        return "ai/vision/gcloud-vision";
+    @RequestMapping("/visionFaceDetection")
+    public String visionFaceDetection() {
+        return "ai/vision/vision-face";
+    }
+
+    @RequestMapping("/visionLandmarkDetection")
+    public String visionLandmarkDetection() {
+        return "ai/vision/vision-landmark";
     }
 
     @RequestMapping("/sentiment")

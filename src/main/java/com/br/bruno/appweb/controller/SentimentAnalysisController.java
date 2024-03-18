@@ -2,17 +2,13 @@ package com.br.bruno.appweb.controller;
 
 import com.br.bruno.appweb.models.sentiment.SentimentDescription;
 import com.br.bruno.appweb.service.AnalyzeSentimentService;
-import com.br.bruno.appweb.service.UploadFileService;
 import com.google.cloud.language.v2.Sentiment;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @RestController
 public class SentimentAnalysisController {

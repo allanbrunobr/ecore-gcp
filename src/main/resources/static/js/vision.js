@@ -1,4 +1,4 @@
-   // Configuração do cliente WebSocket
+   // Configuração do cliente WebSocket para Vision FACE
     var socket = new SockJS('/ws');
     var stompClient = Stomp.over(socket);
 
@@ -13,7 +13,17 @@
         document.getElementById('loading-container').style.display = 'none';
         document.getElementById('result-container').style.display = 'block';
     });
-});
+   // Configuração do cliente WebSocket para Vision LANDMARK
+       stompClient.subscribe('/topic/analysisResultLandmarks', function(message) {
+           var eventData = JSON.parse(message.body);
+           console.log("Resultado LANDMARK recebido:", eventData);
+
+           document.getElementById('result-container-landmark').innerText = JSON.stringify(eventData);
+           document.getElementById('loading-container').style.display = 'none';
+           document.getElementById('result-container-landmark').style.display = 'block';
+       });
+   });
+
 
     function interpretarAnaliseCloudVision(resultado) {
     const likelihoodMap = {
