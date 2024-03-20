@@ -9,6 +9,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 public class TaskExecutorConfig {
 
+    /**
+     * Returns a TaskExecutor bean that creates and manages a thread pool for executing tasks.
+     *
+     * @return a TaskExecutor bean
+     */
     @Bean
     @Primary
     public TaskExecutor taskExecutor() {

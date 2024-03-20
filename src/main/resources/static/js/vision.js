@@ -13,14 +13,17 @@
         document.getElementById('loading-container').style.display = 'none';
         document.getElementById('result-container').style.display = 'block';
     });
-   // Configuração do cliente WebSocket para Vision LANDMARK
-       stompClient.subscribe('/topic/analysisResultLandmarks', function(message) {
-           var eventData = JSON.parse(message.body);
-           console.log("Resultado LANDMARK recebido:", eventData);
+ });
 
-           document.getElementById('result-container-landmark').innerText = JSON.stringify(eventData);
-           document.getElementById('loading-container').style.display = 'none';
-           document.getElementById('result-container-landmark').style.display = 'block';
+   stompClient.connect({}, function(frame) {
+       console.log('Conectado ao WebSocket');
+       stompClient.subscribe('/topic/landmarkData', function(message) {
+           var landmarkDataList = JSON.parse(message.body);
+           var imageUrl = ""; // Defina a URL da imagem, se aplicável
+           var landmarkDetectionMessage = convertToLandmarkDetectionMessage(imageUrl, landmarkDataList);
+           // Faça o que quiser com o objeto LandmarkDetectionMessage
+           console.log(landmarkDetectionMessage);
+
        });
    });
 
@@ -48,3 +51,37 @@
 
     return mensagem;
 }
+
+   function convertToLandmarkDetectionMessage(imageUrl, landmarkDataList) {
+       var landmarkData = [];
+       for (var i = 0; i < landmarkDataList.length; i++) {
+           var response = landmarkDataList[i];
+           if (!response.hasOwnProperty('error')) {
+               var annotations = response.landmarkAnnotations;
+               for (var j = 0; j < annotations.length; j++) {
+                   var annotation = annotations[j];
+                   var locationInfo = annotation.locations[0];
+                   var landmark = {
+                       mid: annotation.mid,
+                       description: annotation.description,
+                       score: annotation.score,
+                       boundingPoly: {
+                           vertices: annotation.boundingPoly.vertices,
+                           normalizedVertices: annotation.boundingPoly.normalizedVertices
+                       },
+                       locations: {
+                           latLng: {
+                               latitude: locationInfo.latLng.latitude,
+                               longitude: locationInfo.latLng.longitude
+                           }
+                       }
+                   };
+                   landmarkData.push(landmark);
+               }
+           }
+       }
+       return {
+           imageUrl: imageUrl,
+           landmarkData: landmarkData
+       };
+   }

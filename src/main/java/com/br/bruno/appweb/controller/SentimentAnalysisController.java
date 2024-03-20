@@ -10,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Controller class for sentiment analysis.
+ */
 @RestController
 public class SentimentAnalysisController {
 
@@ -24,7 +27,7 @@ public class SentimentAnalysisController {
         ModelAndView modelAndView = new ModelAndView("ai/sentiment-analysis/sentiment-analysis-result");
         try {
             CompletableFuture<Sentiment> sentimentFuture = analyzeSentimentService.analyzeSentiment(dados);
-            Sentiment sentiment = sentimentFuture.get(); // Espera pelo resultado
+            Sentiment sentiment = sentimentFuture.get();
 
             SentimentDescription sentimentDescription = new SentimentDescription();
             String description = sentimentDescription.getSentimentDescription(sentiment.getScore(), sentiment.getMagnitude());

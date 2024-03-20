@@ -6,6 +6,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * The FaceDetectionMessage class represents a message containing face detection data.
+ * It includes the URL of the image and a list of FaceData objects that represent the detected faces.
+ */
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)

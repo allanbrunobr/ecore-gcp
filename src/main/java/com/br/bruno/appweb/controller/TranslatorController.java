@@ -2,14 +2,20 @@ package com.br.bruno.appweb.controller;
 
 import com.br.bruno.appweb.service.TranslatorService;
 import com.google.cloud.translate.v3.Translation;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+
+/**
+ * This class represents a controller for handling translation-related requests.
+ */
 @RestController
 public class TranslatorController {
 
@@ -19,14 +25,28 @@ public class TranslatorController {
         this.translatorService = translatorService;
     }
 
+    /**
+     * Returns a ModelAndView object for the "/translator" endpoint.
+     * The ModelAndView object contains the view name "translator/translator".
+     *
+     * @return a ModelAndView object for the "/translator" endpoint
+     */
     @GetMapping("/translator")
     public ModelAndView translator() {
         return new ModelAndView("translator/translator");
     }
+
+    /**
+     *    * This method returns a ResponseEntity object containing a list of supported languages.
+     * It is responsible for handling the "/languages" endpoint.
+     *
+     * @return a ResponseEntity object containing a list of supported languages
+     * @throws IOException if an error occurs while retrieving the supported languages
+     */
     @GetMapping("/languages")
     public ResponseEntity<List<String>> languages() throws IOException {
-        List<String> languages = translatorService.
-                getSupportedLanguages();
+        List<String> languages = translatorService
+                .getSupportedLanguages();
         return ResponseEntity.ok().body(languages);
     }
 

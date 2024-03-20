@@ -1,5 +1,8 @@
 package com.br.bruno.appweb.models.vision;
 
+/**
+ * Classe que representa os dados de uma face.
+ */
 public class FaceData {
     private int id;
     private String joyLikelihood;

@@ -2,7 +2,6 @@ package com.br.bruno.appweb.components;
 
 import com.br.bruno.appweb.models.vision.FaceDetectionMessage;
 import com.br.bruno.appweb.events.EventBus;
-import com.br.bruno.appweb.models.vision.landmarks.LandmarkDetectionMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.gax.core.CredentialsProvider;
@@ -17,6 +16,21 @@ import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+/**
+ * The ResultSubscriber class is responsible for subscribing to different Google Pub/Sub
+ * subscriptions and processing the messages received. It utilizes the EventBus class to publish
+ * events based on the subscription ID.
+ * <p>
+ * The class requires an instance of the EventBus class to be passed in the constructor.
+ * The subscribe() method is used to subscribe to a specific subscription and process the received messages.
+ * <p>
+ * Sample usage:
+ * <pre>{@code
+ * EventBus eventBus = new EventBus();
+ * ResultSubscriber subscriber = new ResultSubscriber(eventBus);
+ * subscriber.init();
+ * }</pre>
+ */
 @Component
 public class ResultSubscriber {
 
@@ -30,10 +44,7 @@ public class ResultSubscriber {
     public void init() {
         String projectId = "app-springboot-project";
         String subscriptionId = "app-ecore-consumer-sub";
-        String landmarkSubscriptionId = "app-ecore-consumer-sub-landmark";
-
         subscribe(projectId, subscriptionId);
-        subscribe(projectId, landmarkSubscriptionId);
     }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -47,15 +58,8 @@ public class ResultSubscriber {
             Subscriber subscriber = Subscriber.newBuilder(subscriptionName, (MessageReceiver) (message, consumer) -> {
             String jsonData = message.getData().toStringUtf8();
                 try {
-                    if (subscriptionId.equals("app-ecore-consumer-sub")) {
-                          FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
-                          eventBus.publish(faceDetectionMessage);
-                      } else if (subscriptionId.equals("app-ecore-consumer-sub-landmark")) {
-                          LandmarkDetectionMessage landmarkDetectionMessage = objectMapper.readValue(jsonData, LandmarkDetectionMessage.class);
-                          eventBus.publish(landmarkDetectionMessage);
-                      } else {
-                          // Handle unknown subscription ID
-                      }
+                    FaceDetectionMessage faceDetectionMessage = objectMapper.readValue(jsonData, FaceDetectionMessage.class);
+                    eventBus.publish(faceDetectionMessage);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -67,5 +71,4 @@ public class ResultSubscriber {
         }
     }
 }
-
 

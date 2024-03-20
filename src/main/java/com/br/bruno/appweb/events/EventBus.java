@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * EventBus is a simple event bus that allows objects to publish events and subscribe to them.
+ */
 public class EventBus {
     private Map<Class<?>, List<EventListener>> subscribers;
 

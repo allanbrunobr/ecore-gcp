@@ -4,6 +4,9 @@ package com.br.bruno.appweb.models.vision.landmarks;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Landmark data.
+ */
 @Getter
 @Setter
 public class LandmarkData {
@@ -11,7 +14,7 @@ public class LandmarkData {
     private String description;
     private double score;
     private BoundingPoly boundingPoly;
-    private Location location;
+    private Locations locations;
 
 }
 

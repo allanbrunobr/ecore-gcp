@@ -3,6 +3,9 @@ package com.br.bruno.appweb.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * MenuController
+ */
 @Controller
 public class MenuController {
 

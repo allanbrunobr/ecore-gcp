@@ -15,6 +15,10 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * This class represents the controller for user profiles. It handles the HTTP requests related
+ * to creating and managing user profiles.
+ */
 @RestController
 @RequiredArgsConstructor
 public class ProfileController {

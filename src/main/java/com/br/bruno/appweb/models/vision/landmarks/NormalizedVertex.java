@@ -5,8 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Location {
+public class NormalizedVertex {
 
-    private LatLng latLng;
+    private float x;
+    private float y;
 
 }
