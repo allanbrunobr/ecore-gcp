@@ -1,5 +1,6 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.models.vision.landmarks.LandmarkDetectionMessage;
 import com.br.bruno.appweb.service.VisionService;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import org.springframework.ui.Model;
@@ -48,7 +49,7 @@ public class VisionController {
 
             try {
                 visionService.detectLandmarkImage(file).thenAccept(landmarkDataList -> {
-                    model.addAttribute("landmarkDataList", landmarkDataList);
+                    model.addAttribute("landmarkDataList", new LandmarkDetectionMessage("", landmarkDataList));
 
                 });
 

@@ -16,24 +16,32 @@
             Photo Analysis Result
         </div>
         <div th:if="${landmarkDataList != null}">
-            <ul>
-                <li th:each="response : ${landmarkDataList}">
-                    <ul th:each="landmark : ${response.getLandmarkAnnotationsList()}">
-                        <p>Description: <span th:text="${landmark.description}"></span></p>
-                        <p>Score: <span th:text="${landmark.score}"></span></p>
-                    </ul>
-                </li>
-            </ul>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="response : ${landmarkDataList}">
+                    <td th:each="landmarkData : ${response.getLandmarkData()}">
+                        <p>Description: <span th:text="${landmarkData.locations.latLng.latitude}"></span></p>
+                    <button type="button" class="btn btn-primary send-coordinates" th:data-latitude="${landmarkData.locations.latLng.latitude}"
+                            th:data-longitude="${landmarkData.locations.latLng.longitude}">Send Coordinates</button>
+                    </td>
+
+                </tr>
+            </table>
         </div>
         <div th:unless="${landmarkDataList != null}">
             <p>Location of the photo is in progress...</p>
         </div>
+
     </div>
 </div>
 
 <th:block th:replace="fragments/commons-js :: commons-js"></th:block>
 <script src="/js/vision.js"></script>
-
 </body>
-
 </html>

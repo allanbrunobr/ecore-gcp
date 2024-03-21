@@ -85,3 +85,27 @@
            landmarkData: landmarkData
        };
    }
+
+
+   $(document).ready(function() {
+       $('.send-coordinates').click(function() {
+           var latitude = $(this).data('latitude');
+           var longitude = $(this).data('longitude');
+alert(latitude);
+           // Enviar os dados para o controller via AJAX
+           $.ajax({
+               type: 'POST',
+               url: '/maps',
+               data: {
+                   latitude: latitude,
+                   longitude: longitude
+               },
+               success: function(response) {
+                   // Lidar com a resposta do controller, se necessário
+               },
+               error: function(xhr, status, error) {
+                   // Lidar com erros de requisição, se necessário
+               }
+           });
+       });
+   });
