@@ -51,6 +51,9 @@ dependencies {
     implementation group: 'com.google.cloud', name: 'google-cloud-vertexai', version: '0.6.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-translate', version: '2.37.0'
     implementation 'com.google.cloud:google-cloud-language'
+    implementation group: 'com.google.maps', name: 'google-maps-services', version: '2.2.0'
+    implementation group: 'com.google.cloud', name: 'google-cloud-vision', version: '3.35.0'
+
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

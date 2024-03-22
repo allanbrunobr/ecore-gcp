@@ -20,7 +20,35 @@ public class LandmarkDetectionMessage {
 
     public LandmarkDetectionMessage(String imageUrl, List<AnnotateImageResponse> responses) {
         this.imageUrl = imageUrl;
-        this.landmarkData = mapResponsesToLandmarkData(responses);
+        this.landmarkData = mapResponsesToLandmarkData(filterHighestScoreLandmarks(responses));
+    }
+
+    public List<AnnotateImageResponse> filterHighestScoreLandmarks(List<AnnotateImageResponse> responses) {
+        List<AnnotateImageResponse> filteredResponses = new ArrayList<>();
+
+        for (AnnotateImageResponse response : responses) {
+            if (!response.hasError()) {
+                double highestScore = Double.MIN_VALUE;
+                EntityAnnotation highestScoreLandmark = null;
+
+                for (EntityAnnotation annotation : response.getLandmarkAnnotationsList()) {
+                    double score = annotation.getScore();
+                    if (score > highestScore) {
+                        highestScore = score;
+                        highestScoreLandmark = annotation;
+                    }
+                }
+
+                if (highestScoreLandmark != null) {
+                    AnnotateImageResponse filteredResponse = AnnotateImageResponse.newBuilder()
+                            .addLandmarkAnnotations(highestScoreLandmark)
+                            .build();
+                    filteredResponses.add(filteredResponse);
+                }
+            }
+        }
+
+        return filteredResponses;
     }
 
     private List<LandmarkData> mapResponsesToLandmarkData(List<AnnotateImageResponse> responses) {

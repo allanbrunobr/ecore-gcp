@@ -1,43 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" charset="UTF-8">
 <head>
-
+    <title>e-Core - GCP</title>
     <th:block th:replace="fragments/common-head-libs :: common-head-libs"></th:block>
-
-  <title>e-Core - GCP</title>
-
 </head>
 <body>
 <th:block th:replace="fragments/menu-fragment :: menu"></th:block>
 
-<div class="container">
+<div class="container mt-3">
     <div class="card">
         <div class="card-header">
             Photo Analysis Result
         </div>
         <div th:if="${landmarkDataList != null}">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Score</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="response : ${landmarkDataList}">
-                    <td th:each="landmarkData : ${response.getLandmarkData()}">
-                        <p>Description: <span th:text="${landmarkData.locations.latLng.latitude}"></span></p>
-                    <button type="button" class="btn btn-primary send-coordinates" th:data-latitude="${landmarkData.locations.latLng.latitude}"
-                            th:data-longitude="${landmarkData.locations.latLng.longitude}">Send Coordinates</button>
-                    </td>
-
-                </tr>
-            </table>
+                <div class="container" th:each="response : ${landmarkDataList}">
+                        <div class="row" th:each="landmarkData : ${response.getLandmarkData()}">
+                            <div class="col">
+                              <p>Place: <span th:text="${landmarkData.description}"></span></p>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-primary send-coordinates" th:data-latitude="${landmarkData.locations.latLng.latitude}"
+                                      th:data-longitude="${landmarkData.locations.latLng.longitude}">Places to visit</button>
+                            </div>
+                        </div>
+                </div>
         </div>
         <div th:unless="${landmarkDataList != null}">
-            <p>Location of the photo is in progress...</p>
+            <p class="text-center mt-3">Location of the photo is in progress...</p>
         </div>
-
     </div>
 </div>
 

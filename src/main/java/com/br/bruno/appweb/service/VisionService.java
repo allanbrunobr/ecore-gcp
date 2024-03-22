@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The VisionService class provides functionality for storing images in a Google Cloud Storage bucket
+ * and detecting landmarks in an image using the Google Cloud Vision API.
+ */
 @Service
 public class VisionService implements EventListener<FaceDetectionMessage> {
     @Value("${project.id}")
@@ -46,6 +50,11 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
         this.storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
     }
 
+    /**
+     * Stores the given file in the bucket.
+     *
+     * @param file the file to store
+     */
     public void store(MultipartFile file) {
         try {
             String fileName = UUID.randomUUID() + file.getOriginalFilename();
@@ -56,6 +65,14 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Detects landmarks in an image.
+     *
+     * @param file the image file
+     * @return a CompletableFuture with a List of AnnotateImageResponse objects
+     * @throws IOException if there is an error reading the file
+     */
     public CompletableFuture<List<AnnotateImageResponse>> detectLandmarkImage(MultipartFile file) throws IOException {
         File tempFile = File.createTempFile("temp", ".jpg");
         Files.write(tempFile.toPath(), file.getBytes());
@@ -65,6 +82,11 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
         return CompletableFuture.completedFuture(listReturn);
     }
 
+    /**
+     * Handles the FaceDetectionMessage event.
+     *
+     * @param event the FaceDetectionMessage event
+     */
     @Override
     public void onEvent(FaceDetectionMessage event) {
         System.out.println("Mensagem recebida pelo UploadServiceVision: " + event.getFaceData());
@@ -72,6 +94,13 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
         System.out.println("Enviado...");
     }
 
+    /**
+     * Detects landmarks in an image.
+     *
+     * @param filePath The file path of the image
+     * @return A list of AnnotateImageResponse objects
+     * @throws IOException If there is an error reading the file
+     */
     public List<AnnotateImageResponse> detectLandmarks(String filePath) throws IOException {
         List<AnnotateImageRequest> requests = new ArrayList<>();
         ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
@@ -95,11 +124,4 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
         }
 
     }
-
-    public void sendLandmarkData(CompletableFuture<List<AnnotateImageResponse>> landmarkDataListFuture) {
-        landmarkDataListFuture.thenAccept(landmarkDataList -> {
-            simpMessagingTemplate.convertAndSend("/topic/landmarkData", landmarkDataList);
-        });
-    }
-
 }
