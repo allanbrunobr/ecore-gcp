@@ -17,7 +17,7 @@
                     Translator
                 </div>
                 <div class="card-body">
-                    <form action="/translatorText" method="post">
+                    <form th:action="@{/translatorText}" method="post">
                         <div class="form-group">
                             <label for="textToTranslate">Your text to translate:</label>
                             <textarea class="form-control" id="textToTranslate" name="textToTranslate" rows="5" required></textarea>
@@ -33,7 +33,7 @@
         </div>
     </div>
 </div>
-<th:block th:replace="fragments/commons-js :: commons-js"></th:block>
+<th:block th:replace="~{fragments/commons-js :: commons-js}"></th:block>
 <script>
     fetch('/languages')
         .then(response => response.json())

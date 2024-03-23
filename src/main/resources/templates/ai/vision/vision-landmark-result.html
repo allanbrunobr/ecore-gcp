@@ -7,10 +7,12 @@
 <body>
 <th:block th:replace="fragments/menu-fragment :: menu"></th:block>
 
+<form class="needs-validation" novalidate th:action="@{/maps}" method="post" enctype="multipart/form-data">
 <div class="container mt-3">
     <div class="card">
-        <div class="card-header">
-            Photo Analysis Result
+        <div class="card-header text-center">
+            <h5 class="mb-0">Landmark Detection Result</h5>
+            <small class="text-muted">Google Cloud Platform</small>
         </div>
         <div th:if="${landmarkDataList != null}">
                 <div class="container" th:each="response : ${landmarkDataList}">
@@ -19,8 +21,11 @@
                               <p>Place: <span th:text="${landmarkData.description}"></span></p>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-primary send-coordinates" th:data-latitude="${landmarkData.locations.latLng.latitude}"
-                                      th:data-longitude="${landmarkData.locations.latLng.longitude}">Places to visit</button>
+                                <input type="hidden" name="latitude" th:value="${landmarkData.locations.latLng.latitude}">
+                                <input type="hidden" name="longitude" th:value="${landmarkData.locations.latLng.longitude}">
+                                <button type="submit" class="btn btn-primary" data-toggle="tooltip"  data-placement="left"
+                                         title="Clique para mais informações">Places to visit</button>
+
                             </div>
                         </div>
                 </div>
@@ -30,8 +35,9 @@
         </div>
     </div>
 </div>
-
+</form>
 <th:block th:replace="fragments/commons-js :: commons-js"></th:block>
 <script src="/js/vision.js"></script>
+
 </body>
 </html>

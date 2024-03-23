@@ -1,18 +1,23 @@
 package com.br.bruno.appweb.models.maps;
 
-import com.google.maps.model.PlacesSearchResult;
+
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
+/**
+ * This class represents the result of a place search, containing lists
+ * of different types of places.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 public class PlaceSearchResult {
-    private List<PlacesSearchResult> restaurants;
-    private List<PlacesSearchResult> airports;
-    private List<PlacesSearchResult> touristAttractions;
-    private List<PlacesSearchResult> carSearchResults;
+
+  private List<PlaceInfo> restaurants;
+  private List<PlaceInfo> airports;
+  private List<PlaceInfo> touristAttractions;
+  private List<PlaceInfo> shoppingMalls;
+  private List<PlaceInfo> hotels;
 }
