@@ -1,6 +1,15 @@
 package com.br.bruno.appweb.service;
 
-import com.google.cloud.translate.v3.*;
+import com.google.cloud.translate.v3.DetectLanguageRequest;
+import com.google.cloud.translate.v3.DetectLanguageResponse;
+import com.google.cloud.translate.v3.GetSupportedLanguagesRequest;
+import com.google.cloud.translate.v3.LocationName;
+import com.google.cloud.translate.v3.SupportedLanguage;
+import com.google.cloud.translate.v3.SupportedLanguages;
+import com.google.cloud.translate.v3.TranslateTextRequest;
+import com.google.cloud.translate.v3.TranslateTextResponse;
+import com.google.cloud.translate.v3.Translation;
+import com.google.cloud.translate.v3.TranslationServiceClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,23 +24,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class TranslatorService {
 
-    @Value("${project.id}")
-    private String projectId;
-    /**
-     * This method translates a text to a target language using Google Cloud Translation API.
-     *
-     * @param text The text to translate.
-     * @param targetLanguageCode The target language code.
-     * @return A list of translations.
-     */
+  @Value("${project.id}")
+  private String projectId;
 
-    @Async
-    public CompletableFuture<List<Translation>> translateTextAsync(String text, String targetLanguageCode) throws Exception {
+  /**
+   * This method translates a text to a target language using Google Cloud Translation API.
+   *
+   * @param text The text to translate.
+   * @param targetLanguageCode The target language code.
+   * @return A list of translations.
+   */
+  @Async
+  public CompletableFuture<List<Translation>> translateTextAsync(String text,
+                                                                   String targetLanguageCode)
+            throws Exception {
 
-        try (TranslationServiceClient client = TranslationServiceClient.create()) {
-            LocationName parent = LocationName.of(projectId, "global");
+    try (TranslationServiceClient client = TranslationServiceClient.create()) {
+      LocationName parent = LocationName.of(projectId, "global");
 
-            TranslateTextRequest request =
+      TranslateTextRequest request =
                     TranslateTextRequest.newBuilder()
                             .setParent(parent.toString())
                             .setMimeType("text/plain")
@@ -40,55 +51,52 @@ public class TranslatorService {
                             .addContents(text)
                             .build();
 
-            TranslateTextResponse response = client.translateText(request);
+      TranslateTextResponse response = client.translateText(request);
 
-            return CompletableFuture.completedFuture(response.getTranslationsList());
-        }
+      return CompletableFuture.completedFuture(response.getTranslationsList());
     }
+  }
+  /**
+   * This method detects the language of a text using Google Cloud Language API.
+   *
+   * @param text The text to detect the language of.
+   * @return The language code of the text.
+   */
 
-    /***
-     * This method detects the language of a text using Google Cloud Language API.
-     *
-     * @param text The text to detect the language of.
-     * @return The language code of the text.
-     */
-    public String languageDetector(String text) throws Exception {
-            try (TranslationServiceClient client = TranslationServiceClient.create()) {
-                LocationName parent = LocationName.of(projectId, "global");
-                DetectLanguageRequest request =
-                        DetectLanguageRequest.newBuilder()
+  public String languageDetector(String text) throws Exception {
+    try (TranslationServiceClient client = TranslationServiceClient.create()) {
+      LocationName parent = LocationName.of(projectId, "global");
+      DetectLanguageRequest request =
+          DetectLanguageRequest.newBuilder()
                                 .setParent(parent.toString())
                                 .setMimeType("text/plain")
                                 .setContent(text)
                                 .build();
-                DetectLanguageResponse response = client.detectLanguage(request);
+      DetectLanguageResponse response = client.detectLanguage(request);
 
-                return response.getLanguagesList().get(0).getLanguageCode();
-            }
-
-        }
-
-    /**
-     * Retrieves the list of supported languages from the Google Cloud Translation API.
-     *
-     * @return A List containing the language codes of the supported languages.
-     * @throws IOException if an error occurs while retrieving the supported languages.
-     */
-    public List<String> getSupportedLanguages() throws IOException {
-        List<String> languages = new ArrayList<>();
-        try (TranslationServiceClient client = TranslationServiceClient.create()) {
-            LocationName parent = LocationName.of(projectId, "global");
-            GetSupportedLanguagesRequest request =
-                    GetSupportedLanguagesRequest.newBuilder().setParent(parent.toString()).build();
-
-            SupportedLanguages response = client.getSupportedLanguages(request);
-
-
-            for (SupportedLanguage language : response.getLanguagesList()) {
-                languages.add(language.getLanguageCode());
-            }
-        }
-        return languages;
+      return response.getLanguagesList().get(0).getLanguageCode();
     }
   }
 
+  /**
+   * Retrieves the list of supported languages from the Google Cloud Translation API.
+   *
+   * @return A List containing the language codes of the supported languages.
+   * @throws IOException if an error occurs while retrieving the supported languages.
+   */
+  public List<String> getSupportedLanguages() throws IOException {
+    List<String> languages = new ArrayList<>();
+    try (TranslationServiceClient client = TranslationServiceClient.create()) {
+      LocationName parent = LocationName.of(projectId, "global");
+      GetSupportedLanguagesRequest request =
+              GetSupportedLanguagesRequest.newBuilder().setParent(parent.toString()).build();
+      SupportedLanguages response = client.getSupportedLanguages(request);
+
+
+      for (SupportedLanguage language : response.getLanguagesList()) {
+        languages.add(language.getLanguageCode());
+      }
+    }
+    return languages;
+  }
+}

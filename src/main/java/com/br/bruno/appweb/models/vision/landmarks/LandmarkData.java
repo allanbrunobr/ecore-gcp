@@ -10,11 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LandmarkData {
-    private String mid;
-    private String description;
-    private double score;
-    private BoundingPoly boundingPoly;
-    private Locations locations;
-
+  private String mid;
+  private String description;
+  private double score;
+  private BoundingPoly boundingPoly;
+  private Locations locations;
 }
 

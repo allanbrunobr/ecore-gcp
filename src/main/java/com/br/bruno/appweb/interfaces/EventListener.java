@@ -1,10 +1,9 @@
 package com.br.bruno.appweb.interfaces;
 
-/***
+/**
  * Interface para eventos.
- *
- * @param <T> Tipo do evento.
+ * Esta interface define um listener para eventos.
  */
 public interface EventListener<T> {
-    void onEvent(T event);
+  void onEvent(T event);
 }

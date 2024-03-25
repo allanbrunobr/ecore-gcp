@@ -15,15 +15,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class AppWebApplication {
 
-    /**
-     * Executes the main application.
-     *
-     * @param args the command line arguments passed to the application
-     */
-    public static void main(String[] args) {
-        SpringApplication.run(AppWebApplication.class, args);
-    }
-
+  /**
+   * Executes the main application.
+   *
+   * @param args the command line arguments passed to the application
+   */
+  public static void main(String[] args) {
+    SpringApplication.run(AppWebApplication.class, args);
+  }
 }
+
 
 

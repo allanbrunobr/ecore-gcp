@@ -48,7 +48,6 @@ public class VisionController {
     return modelAndView;
   }
 
-
   /**
      * Handles the file upload for vision landmark detection.
      * Renders the result page with the detected landmarks.

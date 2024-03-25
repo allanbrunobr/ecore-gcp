@@ -1,13 +1,15 @@
 package com.br.bruno.appweb.models.vision.landmarks;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The Locations class represents a location with latitude and longitude coordinates.
+ */
 @Getter
 @Setter
 public class Locations {
 
-    private LatLng latLng;
+  private LatLng latLng;
 
 }

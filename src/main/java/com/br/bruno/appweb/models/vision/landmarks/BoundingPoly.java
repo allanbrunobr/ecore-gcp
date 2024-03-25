@@ -1,7 +1,6 @@
 package com.br.bruno.appweb.models.vision.landmarks;
 
 import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
- public class BoundingPoly {
-    private List<Vertex> vertices;
-    private List<NormalizedVertex> normalizedVertices;
-  }
+public class BoundingPoly {
+  private List<Vertex> vertices;
+  private List<NormalizedVertex> normalizedVertices;
+}

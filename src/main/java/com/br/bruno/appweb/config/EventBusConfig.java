@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EventBusConfig {
 
-    @Bean
+  @Bean
     public EventBus eventBus() {
-        return new EventBus();
-    }
+    return new EventBus();
+  }
 }

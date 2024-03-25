@@ -6,24 +6,35 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+/**
+ * The {@code TaskExecutorConfig} class is a configuration class that defines
+ * a TaskExecutor bean for creating and managing a thread pool
+ * for executing tasks.
+ * <p>
+ * The TaskExecutor bean returned by this class has the following properties:
+ * - Core pool size: 10
+ * - Max pool size: 20
+ * - Queue capacity: 100
+ * - Thread name prefix: MyThread-
+ * </p>
+ */
 @Configuration
 public class TaskExecutorConfig {
 
-    /**
-     * Returns a TaskExecutor bean that creates and manages a thread pool for executing tasks.
-     *
-     * @return a TaskExecutor bean
-     */
-    @Bean
-    @Primary
-    public TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10); // Define o tamanho inicial do pool de threads
-        executor.setMaxPoolSize(20); // Define o tamanho máximo do pool de threads
-        executor.setQueueCapacity(100); // Define a capacidade da fila de espera para tarefas
-        executor.setThreadNamePrefix("MyThread-"); // Define o prefixo dos nomes das threads
-        executor.initialize(); // Inicializa o executor
-        return executor;
-    }
+  /**
+   * Returns a TaskExecutor bean that creates and manages a thread pool for executing tasks.
+   *
+   * @return a TaskExecutor bean
+   */
+  @Bean
+  @Primary
+  public TaskExecutor taskExecutor() {
+    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setCorePoolSize(10);
+    executor.setMaxPoolSize(20);
+    executor.setQueueCapacity(100);
+    executor.setThreadNamePrefix("MyThread-");
+    executor.initialize();
+    return executor;
+  }
 }
-
