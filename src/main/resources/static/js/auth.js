@@ -13,18 +13,18 @@ const auth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const googleLoginBtn = document.getElementById('google-login-btn');
 if (googleLoginBtn) {
-    const googleLogin = googleLoginBtn.addEventListener('click', async function () {
-            await auth.signInWithPopup(googleProvider)
-                .then(function (result) {
-                    const credential = firebase.auth.GoogleAuthProvider.credentialFromResult(result);
-                    const user = result.user;
-                    console.log(user);
-                    window.location.href = "/main";
-                }).catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                });
-        });
+    googleLoginBtn.addEventListener('click', async function () {
+        await auth.signInWithPopup(googleProvider)
+            .then(function (result) {
+                const credential = firebase.auth.GoogleAuthProvider.credentialFromResult(result);
+                const user = result.user;
+                console.log(user);
+                window.location.href = "/main";
+            }).catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+            });
+    });
 }
 
 
@@ -42,29 +42,3 @@ if (logoutLink) {
     });
 
 }
-// onAuthStateChanged(auth, (user) => {
-//     if (user) {
-//         window.location.href = "../../templates/main.html"; // Redirect to main page
-//     } else {
-//         window.location.href = "../index.html"; // Redirect to main page
-//     }
-// });
-
-// Github
-//
-// const githubProvider = new firebase.auth.GithubAuthProvider();
-// const githubLogin = document.getElementById('github-login-btn')
-//     .addEventListener('click', async function () {
-//         await auth.signInWithPopup(githubProvider)
-//             .then(function(result){
-//                 const credential = firebase.auth.GithubAuthProvider.credentialFromResult(result);
-//                 const user = result.user;
-//                 console.log(user);
-//                 window.location.href = "../pages/main.html";
-//             }).catch((error) => {
-//             const errorCode = error.code;
-//             const errorMessage = error.message;
-//         });
-//     });
-//
-

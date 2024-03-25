@@ -1,6 +1,5 @@
 package com.br.bruno.appweb.models.sentiment;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**

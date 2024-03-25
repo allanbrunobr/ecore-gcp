@@ -72,6 +72,9 @@ public class TranslatorController {
         translatedTextBuilder.append(translation.getTranslatedText()).append(" ");
       }
       modelAndView.addObject("translatedResult", translatedTextBuilder);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new RuntimeException(e);
     } catch (Exception e) {
       modelAndView.addObject("error", "Erro ao traduzir o texto: " + e.getMessage());
     }

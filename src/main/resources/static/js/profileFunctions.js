@@ -8,50 +8,15 @@ $(document).ready(function() {
     });
 });
 
-// $(document).ready(function() {
-//     $('#cep').inputmask('99999-999');
-// });
-//
-// function getAddressByCep(cep) {
-//     return new Promise((resolve, reject) => {
-//         $.getJSON('https://brasilapi.com.br/api/cep/v1/' + cep.replace('-', ''))
-//             .done(function (data) {
-//                 if (data && data.result) {
-//                     resolve(data.result);
-//                 } else {
-//                     reject(new Error('Endereço não encontrado para o CEP fornecido.'));
-//                 }
-//             })
-//             .fail(function (jqxhr, textStatus, error) {
-//                 reject(new Error('Erro ao consultar o CEP: ' + textStatus + ', ' + error));
-//             });
-//     });
-// }
-//
-// $('#cep').blur(function () {
-//     var cep = $(this).val().replace(/\D/g, '');
-//     if (cep.length === 8) {
-//         getAddressByCep(cep)
-//             .then(function (address) {
-//                 $('#street').val(address.street);
-//                 $('#district').val(address.district);
-//                 $('#city').val(address.city);
-//             })
-//             .catch(function (error) {
-//                 console.error(error);
-//                 // Handle the error here, for example, by displaying an error message to the user
-//             });
-//     }
-// });
 // Password and confirmPassword fields validation
-var passwordField = document.getElementById('password');
-var confirmPasswordField = document.getElementById('confirmPassword');
-var passwordFeedback = document.getElementById('password-feedback');
-var confirmPasswordFeedback = document.getElementById('confirmPassword-feedback');
+let passwordField = document.getElementById('password');
+let confirmPasswordField = document.getElementById('confirmPassword');
+let passwordFeedback = document.getElementById('password-feedback');
+let confirmPasswordFeedback = document.getElementById('confirmPassword-feedback');
 
 passwordField.addEventListener('focusout', function() {
-    var password = passwordField.value;
-    var isValid = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)(?=.*\S).{8,20}$/.test(password);
+    const password = passwordField.value;
+    const isValid = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W)(?=.*\S).{8,20}$/.test(password);
     if (isValid) {
         passwordField.classList.add('is-valid');
         passwordFeedback.classList.remove('invalid-feedback');
@@ -72,8 +37,8 @@ passwordField.addEventListener('focusout', function() {
 });
 
 confirmPasswordField.addEventListener('input', function() {
-    var confirmPassword = confirmPasswordField.value;
-    var password = passwordField.value;
+    const confirmPassword = confirmPasswordField.value;
+    const password = passwordField.value;
     if (confirmPassword === password) {
         confirmPasswordField.classList.add('is-valid');
         confirmPasswordFeedback.classList.remove('invalid-feedback');
@@ -90,7 +55,7 @@ confirmPasswordField.addEventListener('input', function() {
 (function() {
     'use strict';
     window.addEventListener('load', function() {
-        var forms = document.getElementsByClassName('needs-validation');
+        const forms = document.getElementsByClassName('needs-validation');
         Array.prototype.filter.call(forms, function(form) {
             form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
@@ -105,7 +70,7 @@ confirmPasswordField.addEventListener('input', function() {
 
 $().ready(function() {
     $("form").submit(function (event) {
-        var form = $(this)[0];
+        const form = $(this)[0];
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();

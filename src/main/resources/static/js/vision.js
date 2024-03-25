@@ -1,15 +1,15 @@
    // Configuração do cliente WebSocket para Vision FACE
-    var socket = new SockJS('/ws');
-    var stompClient = Stomp.over(socket);
+   const socket = new SockJS('/ws');
+   const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function(frame) {
 
     console.log('Conectado ao WebSocket');
     stompClient.subscribe('/topic/analysisResult', function(message) {
-        var eventData = JSON.parse(message.body);
+        const eventData = JSON.parse(message.body);
         console.log("Resultado recebido:", eventData);
 
-        document.getElementById('result-container').innerText = interpretarAnaliseCloudVision(JSON.stringify(eventData));//JSON.stringify(eventData);
+        document.getElementById('result-container').innerText = interpretarAnaliseCloudVision(JSON.stringify(eventData));
         document.getElementById('loading-container').style.display = 'none';
         document.getElementById('result-container').style.display = 'block';
     });
@@ -42,8 +42,8 @@
 
    $(document).ready(function() {
        $('.send-coordinates').click(function() {
-           var latitude = $(this).data('latitude');
-           var longitude = $(this).data('longitude');
+           const latitude = $(this).data('latitude');
+           const longitude = $(this).data('longitude');
            // Enviar os dados para o controller via AJAX
            $.ajax({
                type: 'POST',

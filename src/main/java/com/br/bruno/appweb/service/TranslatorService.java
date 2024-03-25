@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TranslatorService {
 
+  public static final String GLOBAL = "global";
   @Value("${project.id}")
   private String projectId;
 
@@ -40,7 +41,7 @@ public class TranslatorService {
             throws Exception {
 
     try (TranslationServiceClient client = TranslationServiceClient.create()) {
-      LocationName parent = LocationName.of(projectId, "global");
+      LocationName parent = LocationName.of(projectId, GLOBAL);
 
       TranslateTextRequest request =
                     TranslateTextRequest.newBuilder()
@@ -65,7 +66,7 @@ public class TranslatorService {
 
   public String languageDetector(String text) throws Exception {
     try (TranslationServiceClient client = TranslationServiceClient.create()) {
-      LocationName parent = LocationName.of(projectId, "global");
+      LocationName parent = LocationName.of(projectId, GLOBAL);
       DetectLanguageRequest request =
           DetectLanguageRequest.newBuilder()
                                 .setParent(parent.toString())
@@ -87,7 +88,7 @@ public class TranslatorService {
   public List<String> getSupportedLanguages() throws IOException {
     List<String> languages = new ArrayList<>();
     try (TranslationServiceClient client = TranslationServiceClient.create()) {
-      LocationName parent = LocationName.of(projectId, "global");
+      LocationName parent = LocationName.of(projectId, GLOBAL);
       GetSupportedLanguagesRequest request =
               GetSupportedLanguagesRequest.newBuilder().setParent(parent.toString()).build();
       SupportedLanguages response = client.getSupportedLanguages(request);
