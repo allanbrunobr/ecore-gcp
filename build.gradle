@@ -37,10 +37,6 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-websocket', version: '6.1.4'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.ai:spring-ai-vertex-ai-spring-boot-starter'
-    // implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter-sql-mysql', version: '1.2.8.RELEASE'
-    // implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '6.2.2'
-    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
     implementation group: 'com.google.cloud', name: 'google-cloud-storage', version: '2.34.0'
     implementation group: 'com.google.cloud.functions', name: 'functions-framework-api', version: '1.1.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-core', version: '2.35.0'
@@ -53,8 +49,7 @@ dependencies {
     implementation 'com.google.cloud:google-cloud-language'
     implementation group: 'com.google.maps', name: 'google-maps-services', version: '2.2.0'
     implementation group: 'com.google.cloud', name: 'google-cloud-vision', version: '3.35.0'
-
-
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

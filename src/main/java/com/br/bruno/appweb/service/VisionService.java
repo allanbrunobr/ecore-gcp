@@ -1,6 +1,7 @@
 package com.br.bruno.appweb.service;
 
 import com.br.bruno.appweb.events.EventBus;
+import com.br.bruno.appweb.exceptions.PlacesSearchException;
 import com.br.bruno.appweb.interfaces.EventListener;
 import com.br.bruno.appweb.models.vision.FaceDetectionMessage;
 import com.google.cloud.storage.BlobId;
@@ -16,6 +17,7 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -35,15 +37,17 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class VisionService implements EventListener<FaceDetectionMessage> {
-  @Value("${project.id}")
-  private String projectId;
-  @Value("${bucket.name}")
-  private String bucketName;
-  @Value("${bucket.name.landmarks}")
-  private String landmarkBucketName;
+
   private EventBus eventBus;
   private Storage storage;
   private final SimpMessagingTemplate simpMessagingTemplate;
+
+  @Value("${project.id}")
+  private String projectId;
+
+  @Value("${bucket.name}")
+  private String bucketName;
+
 
   /**
    * Constructs a new VisionService with the specified EventBus and SimpMessagingTemplate.
@@ -70,7 +74,7 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
       BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
       storage.create(blobInfo, file.getBytes());
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new RuntimeException("Error storing file in bucket.", e);
     }
   }
 
@@ -83,12 +87,18 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
    */
   public CompletableFuture<List<AnnotateImageResponse>> detectLandmarkImage(
             MultipartFile file) throws IOException {
-    File tempFile = File.createTempFile("temp", ".jpg");
-    Files.write(tempFile.toPath(), file.getBytes());
+    File tempFile = Files.createTempFile("temp", ".jpg").toFile();
+    file.transferTo(tempFile);
     String filePath = tempFile.getAbsolutePath();
-    List<AnnotateImageResponse> listReturn = detectLandmarks(filePath);
+    List<AnnotateImageResponse> responses = detectLandmarks(filePath);
     tempFile.delete();
-    return CompletableFuture.completedFuture(listReturn);
+    return CompletableFuture.completedFuture(responses);
+    //    File tempFile = File.createTempFile("temp", ".jpg");
+    //    Files.write(tempFile.toPath(), file.getBytes());
+    //    String filePath = tempFile.getAbsolutePath();
+    //    List<AnnotateImageResponse> listReturn = detectLandmarks(filePath);
+    //    tempFile.delete();
+    //    return CompletableFuture.completedFuture(listReturn);
   }
 
   /**
@@ -110,24 +120,31 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
    * @return A list of AnnotateImageResponse objects
    * @throws IOException If there is an error reading the file
    */
-  public List<AnnotateImageResponse> detectLandmarks(String filePath) throws IOException {
+  public List<AnnotateImageResponse> detectLandmarks(String filePath) {
     List<AnnotateImageRequest> requests = new ArrayList<>();
-    ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
-    Image img = Image.newBuilder().setContent(imgBytes).build();
-    Feature feat = Feature.newBuilder().setType(Feature.Type.LANDMARK_DETECTION).build();
-    AnnotateImageRequest request =
+    try {
+      FileInputStream fileInputStream = new FileInputStream(filePath);
+      ByteString imgBytes = ByteString.readFrom(fileInputStream);
+      Image img = Image.newBuilder().setContent(imgBytes).build();
+      Feature feat = Feature.newBuilder().setType(Feature.Type.LANDMARK_DETECTION).build();
+      AnnotateImageRequest request =
           AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
-    requests.add(request);
-    try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
-      BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
-      List<AnnotateImageResponse> responses = response.getResponsesList();
-      for (AnnotateImageResponse res : responses) {
-        if (res.hasError()) {
-          System.out.format("Error: %s%n", res.getError().getMessage());
-          return new ArrayList<>();
-        }
+      requests.add(request);
+      try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
+        BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
+        return response.getResponsesList();
       }
-      return responses;
+    //      List<AnnotateImageResponse> responses = response.getResponsesList();
+    //      for (AnnotateImageResponse res : responses) {
+    //        if (res.hasError()) {
+    //          System.out.format("Error: %s%n", res.getError().getMessage());
+    //          return new ArrayList<>();
+    //        }
+    //      }
+    } catch (FileNotFoundException e) {
+      throw new PlacesSearchException("File not found: " + filePath, e);
+    } catch (IOException e) {
+      throw new PlacesSearchException("Error detecting landmarks in image.", e);
     }
   }
 }

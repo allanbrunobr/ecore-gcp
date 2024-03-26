@@ -1,8 +1,10 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.exceptions.PlacesSearchException;
 import com.br.bruno.appweb.models.maps.PlaceSearchResult;
 import com.br.bruno.appweb.models.maps.PlacesSearchService;
 import java.util.concurrent.ExecutionException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,22 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @RestController
 public class MapsController {
+
+  private final PlacesSearchService placesSearchService;
+  private final String googleApiKey;
+
+  /**
+   * Constructor for MapsController.
+   *
+   * @param placesSearchService The service for searching places.
+   * @param googleApiKey        The Google API key for accessing maps services.
+   */
+  public MapsController(PlacesSearchService placesSearchService,
+                        @Value("${google.api.key.places}") String googleApiKey) {
+    this.placesSearchService = placesSearchService;
+    this.googleApiKey = googleApiKey;
+  }
+
   /**
    * Searches for places based on the given latitude and longitude coordinates.
    *
@@ -32,17 +50,21 @@ public class MapsController {
                                         Model model)
             throws ExecutionException, InterruptedException {
     ModelAndView modelAndView = new ModelAndView("maps/maps-result");
-    String apiKey = "AIzaSyBMnDHDoSUU1t1DqEXWiF7FheEeMKHNm5A";
-    PlacesSearchService placesSearchService = new PlacesSearchService(apiKey);
-    PlaceSearchResult placeSearchResult = placesSearchService
-                            .searchPlaces(latitude, longitude).get();
-    model.addAttribute("placeSearchResult", placeSearchResult);
+    try {
+      PlaceSearchResult placeSearchResult = placesSearchService
+                                        .searchPlaces(latitude, longitude).get();
+      model.addAttribute("placeSearchResult", placeSearchResult);
+    } catch (InterruptedException | ExecutionException e) {
+      throw new PlacesSearchException("Error occurred during place search.", e);
+    }
     return modelAndView;
   }
 }
 
 
-
-
-
-
+//    ModelAndView modelAndView = new ModelAndView("maps/maps-result");
+//    String apiKey = "AIzaSyBMnDHDoSUU1t1DqEXWiF7FheEeMKHNm5A";
+//    PlacesSearchService placesSearchService = new PlacesSearchService(apiKey);
+//    PlaceSearchResult placeSearchResult = placesSearchService
+//                            .searchPlaces(latitude, longitude).get();
+//    model.addAttribute("placeSearchResult", placeSearchResult);

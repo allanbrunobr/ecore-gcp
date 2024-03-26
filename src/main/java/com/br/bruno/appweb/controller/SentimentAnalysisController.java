@@ -1,5 +1,6 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.exceptions.SentimentAnalysisException;
 import com.br.bruno.appweb.models.sentiment.SentimentDescription;
 import com.br.bruno.appweb.service.AnalyzeSentimentService;
 import com.google.cloud.language.v2.Sentiment;
@@ -12,11 +13,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 /**
- * Controller class for sentiment analysis.
+ * Controlador responsável por lidar com as requisições de análise de sentimento.
+ * O SentimentAnalysisController gerencia a análise de sentimentos de textos fornecidos
+ * pelos usuários.
  */
 @RestController
 public class SentimentAnalysisController {
 
+  public static final String ERROR_MESSAGE_ATTRIBUTE = "errorMessage";
+  public static final String ERROR_VIEW_NAME = "error";
   private final AnalyzeSentimentService analyzeSentimentService;
 
   /**
@@ -36,8 +41,8 @@ public class SentimentAnalysisController {
    * @return The ModelAndView object that contains the sentiment analysis result.
    */
   @PostMapping("/sentimentAnalysis")
-  public ModelAndView sentimentAnalysis(@RequestParam("dados") String dados) {
-    ModelAndView modelAndView = new ModelAndView(
+  public ModelAndView sentimentAnalysis(@RequestParam("textToAnalyze") String dados) {
+    ModelAndView resultView = new ModelAndView(
                 "ai/sentiment-analysis/sentiment-analysis-result");
     try {
       CompletableFuture<Sentiment> sentimentFuture = analyzeSentimentService
@@ -48,15 +53,23 @@ public class SentimentAnalysisController {
       String description = sentimentDescription
               .getSentimentDescription(sentiment.getScore(), sentiment.getMagnitude());
 
-      modelAndView.addObject("sentiment", sentiment);
-      modelAndView.addObject("description", description);
+      resultView.addObject("sentiment", sentiment);
+      resultView.addObject("description", description);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new RuntimeException(e);
+      resultView.addObject(ERROR_MESSAGE_ATTRIBUTE,
+              "Thread interrupted while analyzing sentiment.");
+      resultView.setViewName(ERROR_VIEW_NAME);
+    } catch (SentimentAnalysisException e) {
+      resultView.addObject(ERROR_MESSAGE_ATTRIBUTE,
+              "Sentiment analysis failed.");
+      resultView.setViewName(ERROR_VIEW_NAME);
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      resultView.addObject(ERROR_MESSAGE_ATTRIBUTE,
+              "An unexpected error occurred.");
+      resultView.setViewName(ERROR_VIEW_NAME);
     }
-    return modelAndView;
+    return resultView;
   }
 }
 

@@ -1,7 +1,9 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.exceptions.PlacesSearchException;
 import com.br.bruno.appweb.models.vision.landmarks.LandmarkDetectionMessage;
 import com.br.bruno.appweb.service.VisionService;
+import java.io.IOException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 
 /**
  * The VisionController class handles requests related to image processing and detection.
@@ -70,9 +71,15 @@ public class VisionController {
         model.addAttribute("landmarkDataList",
                             new LandmarkDetectionMessage("", landmarkDataList));
 
+      }).exceptionally(ex -> {
+        throw new RuntimeException("Ocorreu um erro durante o processamento da solicitação.", ex);
       });
-    } catch (Exception e) {
-      throw new RuntimeException("Ocorreu um erro durante o processamento da solicitação.");
+    } catch (PlacesSearchException e) {
+      modelAndView.addObject("errorMessage", "Erro ao buscar os pontos de referência.");
+      modelAndView.setViewName("error");
+    } catch (IOException e) {
+      modelAndView.addObject("errorMessage", "Erro ao processar o arquivo de imagem.");
+      modelAndView.setViewName("error");
     }
     return modelAndView;
   }
