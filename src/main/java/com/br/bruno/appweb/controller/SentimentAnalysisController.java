@@ -4,8 +4,6 @@ import com.br.bruno.appweb.models.sentiment.SentimentDescription;
 import com.br.bruno.appweb.service.AnalyzeSentimentService;
 import com.google.cloud.language.v2.Sentiment;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +19,12 @@ public class SentimentAnalysisController {
 
   private final AnalyzeSentimentService analyzeSentimentService;
 
+  /**
+   * Constrói um novo controlador de análise de sentimentos.
+   *
+   * @param analyzeSentimentService O serviço de análise de sentimentos a ser
+   *                                utilizado pelo controlador.
+   */
   public SentimentAnalysisController(AnalyzeSentimentService analyzeSentimentService) {
     this.analyzeSentimentService = analyzeSentimentService;
   }
@@ -50,7 +54,7 @@ public class SentimentAnalysisController {
       Thread.currentThread().interrupt();
       throw new RuntimeException(e);
     } catch (Exception e) {
-        throw new RuntimeException(e);
+      throw new RuntimeException(e);
     }
     return modelAndView;
   }

@@ -19,6 +19,11 @@ public class VisionController {
 
   private final VisionService visionService;
 
+  /**
+   * Constructs a new VisionController with the specified VisionService.
+   *
+   * @param visionService The VisionService to be used by the controller.
+   */
   public VisionController(VisionService visionService) {
     this.visionService = visionService;
   }

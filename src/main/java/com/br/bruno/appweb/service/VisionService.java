@@ -46,8 +46,10 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
   private final SimpMessagingTemplate simpMessagingTemplate;
 
   /**
-   * The VisionService class provides methods for detecting landmarks in
-   * images and handling face detection events.
+   * Constructs a new VisionService with the specified EventBus and SimpMessagingTemplate.
+   *
+   * @param eventBus              The EventBus to be used by the service.
+   * @param simpMessagingTemplate The SimpMessagingTemplate to be used by the service.
    */
   public VisionService(EventBus eventBus, SimpMessagingTemplate simpMessagingTemplate) {
     this.eventBus = eventBus;

@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EventBusConfig {
 
+  /**
+   * Creates a new instance of EventBus.
+   *
+   * @return a new instance of EventBus
+   */
   @Bean
     public EventBus eventBus() {
     return new EventBus();

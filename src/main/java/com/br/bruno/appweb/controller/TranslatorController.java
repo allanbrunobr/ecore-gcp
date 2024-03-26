@@ -21,6 +21,11 @@ public class TranslatorController {
 
   private final TranslatorService translatorService;
 
+  /**
+   * Constrói um novo controlador de tradução.
+   *
+   * @param translatorService O serviço de tradução a ser utilizado pelo controlador.
+   */
   public TranslatorController(TranslatorService translatorService) {
     this.translatorService = translatorService;
   }

@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 public class Vertex {
 
-  private int x;
-  private int y;
+  private int vertexX;
+  private int vertexY;
 
 }

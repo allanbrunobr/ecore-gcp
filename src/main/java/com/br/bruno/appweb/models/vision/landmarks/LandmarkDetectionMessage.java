@@ -26,10 +26,19 @@ public class LandmarkDetectionMessage {
   private String imageUrl;
   private List<LandmarkData> landmarkData;
 
+  /**
+   * Represents a message containing landmark detection results for an image.
+   * This message encapsulates the image URL and landmark data extracted from
+   * the detection responses.
+   *
+   * @param imageUrl  The URL of the image for which landmark detection was performed.
+   * @param responses The list of responses containing landmark detection annotations.
+   */
   public LandmarkDetectionMessage(String imageUrl, List<AnnotateImageResponse> responses) {
     this.imageUrl = imageUrl;
     this.landmarkData = mapResponsesToLandmarkData(filterHighestScoreLandmarks(responses));
   }
+
 
   /**
    * Filters the list of AnnotateImageResponse objects and returns a new list containing
@@ -99,8 +108,8 @@ public class LandmarkDetectionMessage {
     List<Vertex> vertices = new ArrayList<>();
     for (com.google.cloud.vision.v1.Vertex vertex : verticesList) {
       Vertex v = new Vertex();
-      v.setX(vertex.getX());
-      v.setY(vertex.getY());
+      v.setVertexX(vertex.getX());
+      v.setVertexY(vertex.getY());
       vertices.add(v);
     }
     return vertices;
@@ -112,8 +121,8 @@ public class LandmarkDetectionMessage {
     List<NormalizedVertex> normalizedVertices = new ArrayList<>();
     for (com.google.cloud.vision.v1.NormalizedVertex vertex : normalizedVerticesList) {
       NormalizedVertex v = new NormalizedVertex();
-      v.setX(vertex.getX());
-      v.setY(vertex.getY());
+      v.setNormalizedVertexX(vertex.getX());
+      v.setNormalizedVertexY(vertex.getY());
       normalizedVertices.add(v);
     }
     return normalizedVertices;

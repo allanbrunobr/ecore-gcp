@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class NormalizedVertex {
 
-  private float x;
-  private float y;
+  private float normalizedVertexX;
+  private float normalizedVertexY;
 
 }

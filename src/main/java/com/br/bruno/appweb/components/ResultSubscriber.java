@@ -38,6 +38,11 @@ public class ResultSubscriber {
 
   private EventBus eventBus;
 
+  /**
+   * Constrói um novo assinante de resultados.
+   *
+   * @param eventBus O barramento de eventos para se inscrever.
+   */
   public ResultSubscriber(EventBus eventBus) {
     this.eventBus = eventBus;
   }

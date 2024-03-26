@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * The `UserService` class is responsible for handling user-related operations,
  * such as saving user information.
  *
- * <p></p>Usage Example:
+ * <p>Usage Example:
  *
  * <p>UserDTO userDTO = new UserDTO();
  * // Set userDTO properties

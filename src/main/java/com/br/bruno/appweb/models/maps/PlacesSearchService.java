@@ -30,6 +30,12 @@ public class PlacesSearchService {
   @Getter
   private final GeoApiContext context;
 
+
+  /**
+   * Constructs a new PlacesSearchService with the provided API key.
+   *
+   * @param apiKey The API key for accessing the Google Places API.
+   */
   public PlacesSearchService(@Value("${google.api.key.places}") String apiKey) {
     this.apiKey = apiKey;
     this.context = new GeoApiContext.Builder().apiKey(apiKey).build();

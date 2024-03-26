@@ -24,6 +24,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class TranslatorService {
 
+  /**
+   * Representa a localização global.
+   */
   public static final String GLOBAL = "global";
   @Value("${project.id}")
   private String projectId;
@@ -34,6 +37,7 @@ public class TranslatorService {
    * @param text The text to translate.
    * @param targetLanguageCode The target language code.
    * @return A list of translations.
+   * @throws Exception If an error occurs during language detection.
    */
   @Async
   public CompletableFuture<List<Translation>> translateTextAsync(String text,
@@ -57,13 +61,14 @@ public class TranslatorService {
       return CompletableFuture.completedFuture(response.getTranslationsList());
     }
   }
-  /**
-   * This method detects the language of a text using Google Cloud Language API.
-   *
-   * @param text The text to detect the language of.
-   * @return The language code of the text.
-   */
 
+  /**
+   * Detects the language of a given text using the Google Cloud Language API.
+   *
+   * @param text The text whose language needs to be detected.
+   * @return The language code of the detected language.
+   * @throws Exception If an error occurs during language detection.
+   */
   public String languageDetector(String text) throws Exception {
     try (TranslationServiceClient client = TranslationServiceClient.create()) {
       LocationName parent = LocationName.of(projectId, GLOBAL);

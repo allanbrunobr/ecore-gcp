@@ -24,10 +24,22 @@ public class ProfileController {
 
   private final UserService userService;
 
+  /**
+   * Cria um novo usuário com base nos dados fornecidos.
+   *
+   * @param userDto O objeto UserDto contendo os dados do usuário a serem salvos.
+   * @return Um objeto ResponseEntity contendo uma mensagem de sucesso e os dados do usuário salvos,
+   *         ou uma mensagem de erro em caso de falha.
+   */
   @PostMapping("/create")
   public ResponseEntity<Object> save(@RequestBody UserDto userDto) {
-    userService.saveUser(userDto);
-    return generateResponse("Items saved successfully!", OK, userDto);
+    try {
+      userService.saveUser(userDto);
+      return generateResponse("Items saved successfully!", HttpStatus.OK, userDto);
+    } catch (Exception e) {
+      return generateErrorResponse("Failed to save items: " + e.getMessage(),
+              HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /**
@@ -47,5 +59,11 @@ public class ProfileController {
     map.put("data", responseObj);
 
     return new ResponseEntity<>(map, status);
+  }
+
+  private ResponseEntity<Object> generateErrorResponse(String message, HttpStatus status) {
+    Map<String, String> error = new HashMap<>();
+    error.put("error", message);
+    return new ResponseEntity<>(error, status);
   }
 }
