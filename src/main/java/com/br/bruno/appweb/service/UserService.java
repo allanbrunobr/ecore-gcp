@@ -1,8 +1,6 @@
 package com.br.bruno.appweb.service;
 
-import com.br.bruno.appweb.models.users.User;
 import com.br.bruno.appweb.models.users.UserDto;
-//import com.br.bruno.appweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +27,7 @@ public class UserService {
    * @throws RuntimeException if there is an error saving the user.
    */
   public void saveUser(UserDto userDto) {
-    User user = new User();
+    // User user = new User();
     try {
         // user.setPrimeiroNome(userDto.getPrimeiroNome());
         // user.setSegundoNome(userDto.getSegundoNome());

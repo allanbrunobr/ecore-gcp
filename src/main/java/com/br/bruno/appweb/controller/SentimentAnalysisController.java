@@ -1,5 +1,6 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.config.Constants;
 import com.br.bruno.appweb.exceptions.SentimentAnalysisException;
 import com.br.bruno.appweb.models.sentiment.SentimentDescription;
 import com.br.bruno.appweb.service.AnalyzeSentimentService;
@@ -20,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class SentimentAnalysisController {
 
-  public static final String ERROR_MESSAGE_ATTRIBUTE = "errorMessage";
-  public static final String ERROR_VIEW_NAME = "error";
   private final AnalyzeSentimentService analyzeSentimentService;
 
   /**
@@ -57,17 +56,17 @@ public class SentimentAnalysisController {
       resultView.addObject("description", description);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      resultView.addObject(ERROR_MESSAGE_ATTRIBUTE,
+      resultView.addObject(Constants.ERROR_MESSAGE_ATTRIBUTE,
               "Thread interrupted while analyzing sentiment.");
-      resultView.setViewName(ERROR_VIEW_NAME);
+      resultView.setViewName(Constants.ERROR_VIEW_NAME);
     } catch (SentimentAnalysisException e) {
-      resultView.addObject(ERROR_MESSAGE_ATTRIBUTE,
+      resultView.addObject(Constants.ERROR_MESSAGE_ATTRIBUTE,
               "Sentiment analysis failed.");
-      resultView.setViewName(ERROR_VIEW_NAME);
+      resultView.setViewName(Constants.ERROR_VIEW_NAME);
     } catch (Exception e) {
-      resultView.addObject(ERROR_MESSAGE_ATTRIBUTE,
+      resultView.addObject(Constants.ERROR_MESSAGE_ATTRIBUTE,
               "An unexpected error occurred.");
-      resultView.setViewName(ERROR_VIEW_NAME);
+      resultView.setViewName(Constants.ERROR_VIEW_NAME);
     }
     return resultView;
   }

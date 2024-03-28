@@ -1,12 +1,15 @@
 package com.br.bruno.appweb.models.maps;
 
 
+import com.br.bruno.appweb.exceptions.PlacesSearchException;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
+import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.PlaceType;
 import com.google.maps.model.PlacesSearchResult;
 import com.google.maps.model.RankBy;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +29,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlacesSearchService {
 
-  private final String apiKey;
   @Getter
   private final GeoApiContext context;
 
@@ -37,7 +39,6 @@ public class PlacesSearchService {
    * @param apiKey The API key for accessing the Google Places API.
    */
   public PlacesSearchService(@Value("${google.api.key.places}") String apiKey) {
-    this.apiKey = apiKey;
     this.context = new GeoApiContext.Builder().apiKey(apiKey).build();
   }
 
@@ -60,7 +61,8 @@ public class PlacesSearchService {
         result.setShoppingMalls(getTopPlaces(PlaceType.SHOPPING_MALL, 5, location, "shopping"));
         result.setHotels(getTopPlaces(PlaceType.LODGING, 5, location, "hotel"));
       } catch (Exception e) {
-        throw new RuntimeException("Ocorreu um erro durante o processamento da solicitação.");
+        throw new PlacesSearchException("Error seaching for places near "
+                + latitude + ", " + longitude + ": " + e.getMessage());
       }
       return result;
     });
@@ -79,21 +81,25 @@ public class PlacesSearchService {
   private List<PlaceInfo> getTopPlaces(PlaceType placeType,
                                          int limit,
                                          LatLng location,
-                                         String keyword) throws Exception {
-    PlacesSearchResult[] places = PlacesApi
-                .nearbySearchQuery(context, location)
-                .radius(50000)
-                .type(placeType)
-                .rankby(RankBy.PROMINENCE)
-                .keyword(keyword)
-                .await()
-                .results;
+                                         String keyword) throws PlacesSearchException {
+    try {
+      PlacesSearchResult[] places = PlacesApi
+              .nearbySearchQuery(context, location)
+              .radius(50000)
+              .type(placeType)
+              .rankby(RankBy.PROMINENCE)
+              .keyword(keyword)
+              .await()
+              .results;
 
-    Arrays.sort(places, Comparator.comparingInt(place ->
-                Optional.ofNullable(place.userRatingsTotal).orElse(0)));
-    Collections.reverse(Arrays.asList(places));
-
-    return createPlaceInfos(Arrays.copyOfRange(places, 0, limit));
+      Arrays.sort(places, Comparator.comparingInt(place ->
+            Optional.ofNullable(place.userRatingsTotal).orElse(0)));
+      Collections.reverse(Arrays.asList(places));
+      return createPlaceInfos(Arrays.copyOfRange(places, 0, limit));
+    } catch (ApiException | InterruptedException | IOException | IllegalArgumentException e) {
+      Thread.currentThread().interrupt();
+      throw new PlacesSearchException("Error occurred while searching for top places.", e);
+    }
   }
 
   /**

@@ -2,6 +2,7 @@ package com.br.bruno.appweb.service;
 
 import com.br.bruno.appweb.events.EventBus;
 import com.br.bruno.appweb.exceptions.PlacesSearchException;
+import com.br.bruno.appweb.exceptions.UploadFileToStorageException;
 import com.br.bruno.appweb.interfaces.EventListener;
 import com.br.bruno.appweb.models.vision.FaceDetectionMessage;
 import com.google.cloud.storage.BlobId;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class VisionService implements EventListener<FaceDetectionMessage> {
+
+  private static final Logger logger = LoggerFactory.getLogger(VisionService.class);
 
   private EventBus eventBus;
   private Storage storage;
@@ -74,7 +79,7 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
       BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
       storage.create(blobInfo, file.getBytes());
     } catch (IOException e) {
-      throw new RuntimeException("Error storing file in bucket.", e);
+      throw new UploadFileToStorageException("Error storing file in bucket.", e);
     }
   }
 
@@ -91,14 +96,12 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
     file.transferTo(tempFile);
     String filePath = tempFile.getAbsolutePath();
     List<AnnotateImageResponse> responses = detectLandmarks(filePath);
-    tempFile.delete();
+    try {
+      Files.delete(tempFile.toPath());
+    } catch (IOException e) {
+      throw new UploadFileToStorageException("Fail to delete temp file: " + tempFile.toPath(), e);
+    }
     return CompletableFuture.completedFuture(responses);
-    //    File tempFile = File.createTempFile("temp", ".jpg");
-    //    Files.write(tempFile.toPath(), file.getBytes());
-    //    String filePath = tempFile.getAbsolutePath();
-    //    List<AnnotateImageResponse> listReturn = detectLandmarks(filePath);
-    //    tempFile.delete();
-    //    return CompletableFuture.completedFuture(listReturn);
   }
 
   /**
@@ -108,9 +111,8 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
    */
   @Override
   public void onEvent(FaceDetectionMessage event) {
-    System.out.println("Mensagem recebida pelo UploadServiceVision: " + event.getFaceData());
+    logger.debug("Mensagem recebida pelo UploadServiceVision: {} ", event.getFaceData());
     simpMessagingTemplate.convertAndSend("/topic/analysisResult", event.getFaceData());
-    System.out.println("Enviado...");
   }
 
   /**
@@ -118,7 +120,6 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
    *
    * @param filePath The file path of the image
    * @return A list of AnnotateImageResponse objects
-   * @throws IOException If there is an error reading the file
    */
   public List<AnnotateImageResponse> detectLandmarks(String filePath) {
     List<AnnotateImageRequest> requests = new ArrayList<>();
@@ -134,13 +135,6 @@ public class VisionService implements EventListener<FaceDetectionMessage> {
         BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
         return response.getResponsesList();
       }
-    //      List<AnnotateImageResponse> responses = response.getResponsesList();
-    //      for (AnnotateImageResponse res : responses) {
-    //        if (res.hasError()) {
-    //          System.out.format("Error: %s%n", res.getError().getMessage());
-    //          return new ArrayList<>();
-    //        }
-    //      }
     } catch (FileNotFoundException e) {
       throw new PlacesSearchException("File not found: " + filePath, e);
     } catch (IOException e) {

@@ -1,5 +1,7 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.config.Constants;
+import com.br.bruno.appweb.exceptions.TranslationException;
 import com.br.bruno.appweb.service.TranslatorService;
 import com.google.cloud.translate.v3.Translation;
 import java.io.IOException;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
 
 /**
  * This class represents a controller for handling translation-related requests.
@@ -79,9 +80,10 @@ public class TranslatorController {
       modelAndView.addObject("translatedResult", translatedTextBuilder);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
-      throw new RuntimeException(e);
+      throw new TranslationException("Error while waiting for translation to complete", e);
     } catch (Exception e) {
-      modelAndView.addObject("error", "Erro ao traduzir o texto: " + e.getMessage());
+      modelAndView.addObject(Constants.ERROR_VIEW_NAME,
+              "Erro ao traduzir o texto: " + e.getMessage());
     }
     return modelAndView;
   }

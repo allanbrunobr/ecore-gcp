@@ -1,6 +1,7 @@
 package com.br.bruno.appweb.components;
 
 import com.br.bruno.appweb.events.EventBus;
+import com.br.bruno.appweb.exceptions.ResultVisionException;
 import com.br.bruno.appweb.models.vision.FaceDetectionMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +14,8 @@ import com.google.pubsub.v1.ProjectSubscriptionName;
 import java.io.FileInputStream;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-
-
 
 /**
  * The ResultSubscriber class is responsible for subscribing to different Google Pub/Sub
@@ -42,9 +42,12 @@ public class ResultSubscriber {
    * Constrói um novo assinante de resultados.
    *
    * @param eventBus O barramento de eventos para se inscrever.
+   * @param simpMessagingTemplate  O template de mensagens simp para enviar mensagens
+   *                               para o WebSocket.
    */
-  public ResultSubscriber(EventBus eventBus) {
+  public ResultSubscriber(EventBus eventBus, SimpMessagingTemplate simpMessagingTemplate) {
     this.eventBus = eventBus;
+    this.simpMessagingTemplate = simpMessagingTemplate;
   }
 
   /**
@@ -63,10 +66,11 @@ public class ResultSubscriber {
   @PostConstruct
   public void init() {
     String projectId = "app-springboot-project";
-    String subscriptionId = "app-ecore-consumer-sub";
+    String subscriptionId = "filevisioned-topic-sub";
     subscribe(projectId, subscriptionId);
   }
 
+  private final SimpMessagingTemplate simpMessagingTemplate;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
@@ -90,8 +94,11 @@ public class ResultSubscriber {
                         FaceDetectionMessage faceDetectionMessage = objectMapper
                                 .readValue(jsonData, FaceDetectionMessage.class);
                         eventBus.publish(faceDetectionMessage);
+                        simpMessagingTemplate.convertAndSend("/topic/analysisResult",
+                                faceDetectionMessage.toString());
                       } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                        throw new ResultVisionException("Error on processing message: "
+                                + jsonData + " - " + e.getMessage());
                       }
                       consumer.ack();
                     }).setCredentialsProvider(credentialsProvider).build();

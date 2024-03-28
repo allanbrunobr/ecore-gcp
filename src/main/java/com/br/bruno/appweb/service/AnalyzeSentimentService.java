@@ -11,10 +11,10 @@ import com.google.cloud.language.v2.Sentiment;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+
 
 /**
  * Service to analyze sentiment of a text.
@@ -22,14 +22,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnalyzeSentimentService {
 
-  private static final Logger logger = LoggerFactory.getLogger(AnalyzeSentimentService.class);
-
   /***  Analyze the sentiment of a text.
   *
   * @param text The text to analyze.
   * @return The sentiment of the text.
-  * @throws Exception on errors while closing the client.
-  */
+   */
   @Async
     public CompletableFuture<Sentiment> analyzeSentiment(String text) {
     try {
@@ -48,7 +45,6 @@ public class AnalyzeSentimentService {
         return CompletableFuture.completedFuture(sentiment);
       }
     } catch (IOException e) {
-      logger.error("Error loading credentials", e);
       throw new SentimentAnalysisException("Error loading credentials", e);
     }
   }

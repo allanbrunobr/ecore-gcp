@@ -10,7 +10,7 @@ import java.util.Map;
  * EventBus is a simple event bus that allows objects to publish events and subscribe to them.
  */
 public class EventBus {
-  private Map<Class<?>, List<EventListener>> subscribers;
+  private Map<Class<?>, List<EventListener<?>>> subscribers;
 
   /**
    * EventBus is a simple event bus that allows objects to publish events and subscribe to them.
@@ -38,10 +38,12 @@ public class EventBus {
    * @param <T>   the type of the event
    */
   public <T> void publish(T event) {
-    List<EventListener> listeners = subscribers.get(event.getClass());
+    List<EventListener<?>> listeners = subscribers.get(event.getClass());
     if (listeners != null) {
-      for (EventListener listener : listeners) {
-        listener.onEvent(event);
+      for (EventListener<?> listener : listeners) {
+        @SuppressWarnings("unchecked")
+        EventListener<T> typedListener = (EventListener<T>) listener;
+        typedListener.onEvent(event);
       }
     }
   }

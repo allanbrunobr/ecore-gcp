@@ -1,7 +1,5 @@
 package com.br.bruno.appweb.controller;
 
-import static org.springframework.http.HttpStatus.OK;
-
 import com.br.bruno.appweb.models.users.UserDto;
 import com.br.bruno.appweb.service.UserService;
 import java.util.HashMap;

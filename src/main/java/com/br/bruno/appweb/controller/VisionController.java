@@ -1,5 +1,6 @@
 package com.br.bruno.appweb.controller;
 
+import com.br.bruno.appweb.config.Constants;
 import com.br.bruno.appweb.exceptions.PlacesSearchException;
 import com.br.bruno.appweb.models.vision.landmarks.LandmarkDetectionMessage;
 import com.br.bruno.appweb.service.VisionService;
@@ -49,7 +50,7 @@ public class VisionController {
       redirectAttributes.addFlashAttribute("message", message);
     } catch (Exception e) {
       message = "Falha ao fazer upload do arquivo " + file.getOriginalFilename() + "!";
-      redirectAttributes.addFlashAttribute("error", message);
+      redirectAttributes.addFlashAttribute(Constants.ERROR_MESSAGE_ATTRIBUTE, message);
     }
     return modelAndView;
   }
@@ -67,19 +68,19 @@ public class VisionController {
                                                         Model model) {
     ModelAndView modelAndView = new ModelAndView("ai/vision/vision-landmark-result");
     try {
-      visionService.detectLandmarkImage(file).thenAccept(landmarkDataList -> {
-        model.addAttribute("landmarkDataList",
-                            new LandmarkDetectionMessage("", landmarkDataList));
-
-      }).exceptionally(ex -> {
-        throw new RuntimeException("Ocorreu um erro durante o processamento da solicitação.", ex);
+      visionService.detectLandmarkImage(file).thenAccept(landmarkDataList ->
+          model.addAttribute("landmarkDataList",
+                            new LandmarkDetectionMessage("", landmarkDataList))
+      ).exceptionally(ex -> {
+        throw new PlacesSearchException("An error occurred while processing the request.", ex);
       });
     } catch (PlacesSearchException e) {
-      modelAndView.addObject("errorMessage", "Erro ao buscar os pontos de referência.");
-      modelAndView.setViewName("error");
+      modelAndView.addObject(Constants.ERROR_MESSAGE_ATTRIBUTE, "Error in find landmarks.");
+      modelAndView.setViewName(Constants.ERROR_VIEW_NAME);
     } catch (IOException e) {
-      modelAndView.addObject("errorMessage", "Erro ao processar o arquivo de imagem.");
-      modelAndView.setViewName("error");
+      modelAndView.addObject(Constants.ERROR_MESSAGE_ATTRIBUTE,
+              "Error in processing the image file.");
+      modelAndView.setViewName(Constants.ERROR_VIEW_NAME);
     }
     return modelAndView;
   }

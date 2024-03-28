@@ -61,6 +61,13 @@ dependencyManagement {
     }
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.br.bruno.appweb.AppWebApplication'
+    }
+}
+
+
 tasks.named('test') {
     useJUnitPlatform()
 }
